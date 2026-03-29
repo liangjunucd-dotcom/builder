@@ -1,0 +1,5 @@
+{
+  "name": "Aqara Builder",
+  "description": "Aqara Builder platform for spatial intelligence developers.",
+  "requestFramePermissions": []
+}

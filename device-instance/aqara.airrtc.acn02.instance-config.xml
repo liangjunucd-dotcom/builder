@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DeviceInstantiationConfig version="0.1.0-draft" xmlns="https://space.semantic.model/instance/v0">
+  <Metadata>
+    <Source>user-provided tabular rows</Source>
+    <GeneratedFor model="aqara.airrtc.acn02" productName="温控伴侣 T1（室内机）"/>
+    <Notes>
+      <Note id="n1">This file is a real-device instantiation config derived from the provided row data.</Note>
+      <Note id="n2">It keeps raw source path, transform service, and handler args for runtime mapping.</Note>
+      <Note id="n3">FreshAirControl is referenced as a pending object type because it is not yet defined in the current semantic model draft.</Note>
+    </Notes>
+  </Metadata>
+
+  <DeviceProfile>
+    <ModelCode>aqara.airrtc.acn02</ModelCode>
+    <ProductName>温控伴侣 T1（室内机）</ProductName>
+    <IncludeInTest>true</IncludeInTest>
+    <Priority>P2</Priority>
+    <CommunityCategory>其他设备</CommunityCategory>
+    <BasicCapabilityInScope>true</BasicCapabilityInScope>
+    <SpecClass>T1</SpecClass>
+  </DeviceProfile>
+
+  <Endpoints>
+    <Endpoint id="2" name="温控器" deviceType="AirConditioner">
+      <ObjectInstance id="aqara.airrtc.acn02.ep2.output" objectTypeRef="Output" functionCode="Output" functionName="开关功能" resolutionState="resolved">
+        <PointInstance id="aqara.airrtc.acn02.ep2.output.OnOff"
+                       kind="trait"
+                       tocId="32920"
+                       tocCode="OnOff"
+                       displayName="开关状态"
+                       valueKind="布尔"
+                       dataType="Bool"
+                       accessMode="可读、可写、可上报"
+                       required="Mandatory"
+                       operationScope="不在manager服务处理，仅在device服务处理"
+                       sourcePath="4.1.85"
+                       specClass="T1">
+          <EnumSpec><![CDATA[[{"key":"Off","value":"0"},{"key":"On","value":"1"}]]]></EnumSpec>
+        </PointInstance>
+
+        <PointInstance id="aqara.airrtc.acn02.ep2.output.Toggle"
+                       kind="command"
+                       tocId="32922"
+                       tocCode="Toggle"
+                       displayName="开/关"
+                       valueKind=""
+                       dataType="未知数据类型"
+                       accessMode="可写"
+                       required="Optional"
+                       operationScope="不在manager服务处理，仅在device服务处理"
+                       sourcePath="4.1.85"
+                       specClass="T1"/>
+      </ObjectInstance>
+
+      <ObjectInstance id="aqara.airrtc.acn02.ep2.heaterCooler" objectTypeRef="HeaterCooler" functionCode="HeaterCooler" functionName="冷暖控制功能" resolutionState="resolved">
+        <PointInstance id="aqara.airrtc.acn02.ep2.heaterCooler.HeaterCoolerMode"
+                       kind="trait"
+                       tocId="32947"
+                       tocCode="HeaterCoolerMode"
+                       displayName="制热制冷模式"
+                       valueKind="枚举"
+                       dataType="Uint8"
+                       accessMode="可读、可写、可上报"
+                       required="Mandatory"
+                       operationScope="不在manager服务处理，仅在device服务处理"
+                       sourcePath="14.140.85"
+                       handler="simpleDeviceModelTransformService"
+                       specClass="T1">
+          <EnumSpec><![CDATA[[{"key":"Cool","value":"0"},{"key":"Heat","value":"1"},{"key":"Auto","value":"2"},{"key":"Fan","value":"3"},{"key":"Dry","value":"4"},{"key":"Sleep","value":"5"}]]]></EnumSpec>
+          <HandlerArgs><![CDATA[{"0":2,"1":0,"2":4,"3":3,"4":1}]]></HandlerArgs>
+        </PointInstance>
+
+        <PointInstance id="aqara.airrtc.acn02.ep2.heaterCooler.HeatingTemperature"
+                       kind="trait"
+                       tocId="32948"
+                       tocCode="HeatingTemperature"
+                       displayName="制热温度"
+                       valueKind="数值"
+                       dataType="Float"
+                       accessMode="可读、可写、可上报"
+                       minValue="16"
+                       maxValue="32"
+                       stepValue="1"
+                       unit="℃"
+                       required="Optional"
+                       operationScope="不在manager服务处理，仅在device服务处理"
+                       sourcePath="1.1.85"
+                       handler="multipleTransformService"
+                       specClass="T1">
+          <HandlerArgs><![CDATA[{"downMultiple": 100,"upMultiple": -100}]]></HandlerArgs>
+        </PointInstance>
+
+        <PointInstance id="aqara.airrtc.acn02.ep2.heaterCooler.CoolingTemperature"
+                       kind="trait"
+                       tocId="32949"
+                       tocCode="CoolingTemperature"
+                       displayName="制冷温度"
+                       valueKind="数值"
+                       dataType="Float"
+                       accessMode="可读、可写、可上报"
+                       minValue="16"
+                       maxValue="32"
+                       stepValue="1"
+                       unit="℃"
+                       required="Optional"
+                       operationScope="不在manager服务处理，仅在device服务处理"
+                       sourcePath="1.1.85"
+                       handler="multipleTransformService"
+                       specClass="T1">
+          <HandlerArgs><![CDATA[{"downMultiple": 100,"upMultiple": -100}]]></HandlerArgs>
+        </PointInstance>
+
+        <PointInstance id="aqara.airrtc.acn02.ep2.heaterCooler.CurrentTemperature"
+                       kind="trait"
+                       tocId="32952"
+                       tocCode="CurrentTemperature"
+                       displayName="温度"
+                       valueKind="数值"
+                       dataType="Float"
+                       accessMode="可读、可上报"
+                       minValue="-50"
+                       maxValue="100"
+                       stepValue="0.01"
+                       unit="℃"
+                       required="Optional"
+                       operationScope="不在manager服务处理，仅在device服务处理"
+                       sourcePath="0.1.85"
+                       handler="multipleTransformService"
+                       specClass="T1">
+          <HandlerArgs><![CDATA[{"downMultiple": 100,"upMultiple": -100}]]></HandlerArgs>
+        </PointInstance>
+      </ObjectInstance>
+
+      <ObjectInstance id="aqara.airrtc.acn02.ep2.fanControl" objectTypeRef="FanControl" functionCode="FanControl" functionName="风扇控制" resolutionState="resolved">
+        <PointInstance id="aqara.airrtc.acn02.ep2.fanControl.FanMode"
+                       kind="trait"
+                       tocId="32950"
+                       tocCode="FanMode"
+                       displayName="风速"
+                       valueKind="枚举"
+                       dataType="Uint8"
+                       accessMode="可读、可写、可上报"
+                       required="Mandatory"
+                       operationScope="不在manager服务处理，仅在device服务处理"
+                       sourcePath="14.1.85"
+                       handler="simpleDeviceModelTransformService"
+                       specClass="T1">
+          <EnumSpec><![CDATA[[{"key":"LowSpeed","name":"LowSpeed","value":"1"},{"key":"MediumSpeed","name":"MediumSpeed","value":"2"},{"key":"HighSpeed","name":"HighSpeed","value":"3"},{"key":"Auto","name":"自动","value":"4"}]]]></EnumSpec>
+          <HandlerArgs><![CDATA[{"0":4,"1":1,"2":2,"3":3}]]></HandlerArgs>
+        </PointInstance>
+      </ObjectInstance>
+    </Endpoint>
+
+    <Endpoint id="3" name="新风机" deviceType="Ventilation">
+      <ObjectInstance id="aqara.airrtc.acn02.ep3.output" objectTypeRef="Output" functionCode="Output" functionName="开关功能" resolutionState="resolved">
+        <PointInstance id="aqara.airrtc.acn02.ep3.output.OnOff"
+                       kind="trait"
+                       tocId="32920"
+                       tocCode="OnOff"
+                       displayName="开关状态"
+                       valueKind="布尔"
+                       dataType="Bool"
+                       accessMode="可读、可写、可上报"
+                       required="Mandatory"
+                       operationScope="不在manager服务处理，仅在device服务处理"
+                       sourcePath="4.1.85"
+                       specClass="T1">
+          <EnumSpec><![CDATA[[{"key":"Off","value":"0"},{"key":"On","value":"1"}]]]></EnumSpec>
+        </PointInstance>
+      </ObjectInstance>
+
+      <ObjectInstance id="aqara.airrtc.acn02.ep3.fanControl" objectTypeRef="FanControl" functionCode="FanControl" functionName="风扇控制" resolutionState="resolved">
+        <PointInstance id="aqara.airrtc.acn02.ep3.fanControl.FanMode"
+                       kind="trait"
+                       tocId="32950"
+                       tocCode="FanMode"
+                       displayName="风速"
+                       valueKind="枚举"
+                       dataType="Uint8"
+                       accessMode="可读、可写、可上报"
+                       required="Mandatory"
+                       operationScope="不在manager服务处理，仅在device服务处理"
+                       sourcePath="14.39.85"
+                       handler="simpleDeviceModelTransformService"
+                       specClass="T1">
+          <EnumSpec><![CDATA[[{"key":"LowSpeed","name":"LowSpeed","value":"1"},{"key":"MediumSpeed","name":"MediumSpeed","value":"2"},{"key":"HighSpeed","name":"HighSpeed","value":"3"}]]]></EnumSpec>
+          <HandlerArgs><![CDATA[{"2":1,"1":2,"0":3}]]></HandlerArgs>
+        </PointInstance>
+      </ObjectInstance>
+
+      <ObjectInstance id="aqara.airrtc.acn02.ep3.freshAirControl" objectTypeRef="FreshAirControl" functionCode="FreshAirControl" functionName="新风控制" resolutionState="pending_object_type_definition">
+        <PointInstance id="aqara.airrtc.acn02.ep3.freshAirControl.FreshAirMode"
+                       kind="trait"
+                       tocId="20007"
+                       tocCode="FreshAirMode"
+                       displayName="新风模式"
+                       valueKind="枚举"
+                       dataType="Uint8"
+                       accessMode="可读、可写、可上报"
+                       defaultValue="0"
+                       required="Mandatory"
+                       operationScope="不在manager服务处理，仅在device服务处理"
+                       sourcePath="14.35.85"
+                       specClass="T1">
+          <EnumSpec><![CDATA[[{"key":"Manual","name":"手动","value":"0"},{"key":"Auto","name":"自动","value":"1"},{"key":"Exhaust","name":"排风","value":"2"},{"key":"HeatExchange","name":"热交换","value":"3"},{"key":"InternalCirculation","name":"内循环","value":"4"},{"key":"ExternalCirculation","name":"外循环","value":"5"},{"key":"PowerSaving","name":"省电","value":"6"},{"key":"Strong","name":"强劲","value":"7"},{"key":"FreshAir","name":"新风","value":"8"},{"key":"Bypass","name":"旁通","value":"9"}]]]></EnumSpec>
+        </PointInstance>
+      </ObjectInstance>
+    </Endpoint>
+  </Endpoints>
+
+  <Bindings>
+    <Binding endpointRef="2" objectRef="aqara.airrtc.acn02.ep2.output" semanticObjectType="Output"/>
+    <Binding endpointRef="2" objectRef="aqara.airrtc.acn02.ep2.heaterCooler" semanticObjectType="HeaterCooler"/>
+    <Binding endpointRef="2" objectRef="aqara.airrtc.acn02.ep2.fanControl" semanticObjectType="FanControl"/>
+    <Binding endpointRef="3" objectRef="aqara.airrtc.acn02.ep3.output" semanticObjectType="Output"/>
+    <Binding endpointRef="3" objectRef="aqara.airrtc.acn02.ep3.fanControl" semanticObjectType="FanControl"/>
+    <Binding endpointRef="3" objectRef="aqara.airrtc.acn02.ep3.freshAirControl" semanticObjectType="FreshAirControl"/>
+  </Bindings>
+</DeviceInstantiationConfig>

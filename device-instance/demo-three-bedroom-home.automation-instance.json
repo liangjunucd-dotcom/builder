@@ -1,0 +1,632 @@
+{
+  "metadata": {
+    "name": "three-bedroom-home-demo-automation-pack",
+    "description": "Derived from demo-three-bedroom-home.bxml.xml for aqara-mcp-automation create_automation.data.config reuse.",
+    "scope": [
+      {
+        "name": "masterBedroomMotion",
+        "type": "device.property",
+        "deviceId": "dev.master_bedroom.motion",
+        "endpointId": 1,
+        "functionCode": "OccupancySensing",
+        "traitCode": "Occupancy"
+      },
+      {
+        "name": "bedroom2Motion",
+        "type": "device.property",
+        "deviceId": "dev.bedroom_2.motion",
+        "endpointId": 1,
+        "functionCode": "OccupancySensing",
+        "traitCode": "Occupancy"
+      },
+      {
+        "name": "bedroom3Motion",
+        "type": "device.property",
+        "deviceId": "dev.bedroom_3.motion",
+        "endpointId": 1,
+        "functionCode": "OccupancySensing",
+        "traitCode": "Occupancy"
+      },
+      {
+        "name": "livingRoomMotion",
+        "type": "device.property",
+        "deviceId": "dev.living_room.motion",
+        "endpointId": 1,
+        "functionCode": "OccupancySensing",
+        "traitCode": "Occupancy"
+      },
+      {
+        "name": "bathroom1Motion",
+        "type": "device.property",
+        "deviceId": "dev.bathroom_1.motion",
+        "endpointId": 1,
+        "functionCode": "OccupancySensing",
+        "traitCode": "Occupancy"
+      },
+      {
+        "name": "bathroom2Motion",
+        "type": "device.property",
+        "deviceId": "dev.bathroom_2.motion",
+        "endpointId": 1,
+        "functionCode": "OccupancySensing",
+        "traitCode": "Occupancy"
+      },
+      {
+        "name": "balconyDoorState",
+        "type": "device.property",
+        "deviceId": "dev.balcony_door.contact",
+        "endpointId": 1,
+        "functionCode": "Contact",
+        "traitCode": "ContactSensorState"
+      },
+      {
+        "name": "masterBedroomWindowState",
+        "type": "device.property",
+        "deviceId": "dev.master_bedroom.window_contact",
+        "endpointId": 1,
+        "functionCode": "Contact",
+        "traitCode": "ContactSensorState"
+      },
+      {
+        "name": "bedroom2WindowState",
+        "type": "device.property",
+        "deviceId": "dev.bedroom_2.window_contact",
+        "endpointId": 1,
+        "functionCode": "Contact",
+        "traitCode": "ContactSensorState"
+      },
+      {
+        "name": "bedroom3WindowState",
+        "type": "device.property",
+        "deviceId": "dev.bedroom_3.window_contact",
+        "endpointId": 1,
+        "functionCode": "Contact",
+        "traitCode": "ContactSensorState"
+      },
+      {
+        "name": "livingRoomWindowState",
+        "type": "device.property",
+        "deviceId": "dev.living_room.window_contact",
+        "endpointId": 1,
+        "functionCode": "Contact",
+        "traitCode": "ContactSensorState"
+      }
+    ]
+  },
+  "automations": [
+    {
+      "name": "主卧夜间有人开灯",
+      "starters": [
+        {
+          "type": "property.event",
+          "source": {
+            "type": "data.ref",
+            "from": "/metadata/scope",
+            "select": {
+              "by": "name",
+              "value": "masterBedroomMotion"
+            }
+          },
+          "is": true,
+          "for": "5sec",
+          "suppressFor": "30sec"
+        }
+      ],
+      "condition": {
+        "type": "and",
+        "conditions": [
+          {
+            "type": "time.between",
+            "after": "18:00",
+            "before": "06:00"
+          },
+          {
+            "type": "property.state",
+            "source": {
+              "type": "device.property",
+              "deviceId": "dev.master_bedroom.light",
+              "endpointId": 1,
+              "functionCode": "Output",
+              "traitCode": "OnOff"
+            },
+            "is": false
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "device.trait.write",
+          "functionCode": "Output",
+          "traitCode": "OnOff",
+          "targets": [
+            {
+              "deviceId": "dev.master_bedroom.light",
+              "endpointIds": [1]
+            }
+          ],
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "次卧一夜间有人开灯",
+      "starters": [
+        {
+          "type": "property.event",
+          "source": {
+            "type": "data.ref",
+            "from": "/metadata/scope",
+            "select": {
+              "by": "name",
+              "value": "bedroom2Motion"
+            }
+          },
+          "is": true,
+          "for": "5sec",
+          "suppressFor": "30sec"
+        }
+      ],
+      "condition": {
+        "type": "and",
+        "conditions": [
+          {
+            "type": "time.between",
+            "after": "18:00",
+            "before": "06:00"
+          },
+          {
+            "type": "property.state",
+            "source": {
+              "type": "device.property",
+              "deviceId": "dev.bedroom_2.light",
+              "endpointId": 1,
+              "functionCode": "Output",
+              "traitCode": "OnOff"
+            },
+            "is": false
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "device.trait.write",
+          "functionCode": "Output",
+          "traitCode": "OnOff",
+          "targets": [
+            {
+              "deviceId": "dev.bedroom_2.light",
+              "endpointIds": [1]
+            }
+          ],
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "次卧二夜间有人开灯",
+      "starters": [
+        {
+          "type": "property.event",
+          "source": {
+            "type": "data.ref",
+            "from": "/metadata/scope",
+            "select": {
+              "by": "name",
+              "value": "bedroom3Motion"
+            }
+          },
+          "is": true,
+          "for": "5sec",
+          "suppressFor": "30sec"
+        }
+      ],
+      "condition": {
+        "type": "and",
+        "conditions": [
+          {
+            "type": "time.between",
+            "after": "18:00",
+            "before": "06:00"
+          },
+          {
+            "type": "property.state",
+            "source": {
+              "type": "device.property",
+              "deviceId": "dev.bedroom_3.light",
+              "endpointId": 1,
+              "functionCode": "Output",
+              "traitCode": "OnOff"
+            },
+            "is": false
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "device.trait.write",
+          "functionCode": "Output",
+          "traitCode": "OnOff",
+          "targets": [
+            {
+              "deviceId": "dev.bedroom_3.light",
+              "endpointIds": [1]
+            }
+          ],
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "客厅晚间有人开灯",
+      "starters": [
+        {
+          "type": "property.event",
+          "source": {
+            "type": "data.ref",
+            "from": "/metadata/scope",
+            "select": {
+              "by": "name",
+              "value": "livingRoomMotion"
+            }
+          },
+          "is": true,
+          "for": "5sec",
+          "suppressFor": "30sec"
+        }
+      ],
+      "condition": {
+        "type": "and",
+        "conditions": [
+          {
+            "type": "time.between",
+            "after": "18:00",
+            "before": "23:59"
+          },
+          {
+            "type": "property.state",
+            "source": {
+              "type": "device.property",
+              "deviceId": "dev.living_room.light",
+              "endpointId": 1,
+              "functionCode": "Output",
+              "traitCode": "OnOff"
+            },
+            "is": false
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "device.trait.write",
+          "functionCode": "Output",
+          "traitCode": "OnOff",
+          "targets": [
+            {
+              "deviceId": "dev.living_room.light",
+              "endpointIds": [1]
+            }
+          ],
+          "value": true
+        }
+      ]
+    },
+    {
+      "name": "卫生间一无人自动关灯",
+      "starters": [
+        {
+          "type": "property.event",
+          "source": {
+            "type": "data.ref",
+            "from": "/metadata/scope",
+            "select": {
+              "by": "name",
+              "value": "bathroom1Motion"
+            }
+          },
+          "is": false,
+          "for": "5min",
+          "suppressFor": "1min"
+        }
+      ],
+      "condition": {
+        "type": "property.state",
+        "source": {
+          "type": "device.property",
+          "deviceId": "dev.bathroom_1.light",
+          "endpointId": 1,
+          "functionCode": "Output",
+          "traitCode": "OnOff"
+        },
+        "is": true
+      },
+      "actions": [
+        {
+          "type": "device.trait.write",
+          "functionCode": "Output",
+          "traitCode": "OnOff",
+          "targets": [
+            {
+              "deviceId": "dev.bathroom_1.light",
+              "endpointIds": [1]
+            }
+          ],
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "卫生间二无人自动关灯",
+      "starters": [
+        {
+          "type": "property.event",
+          "source": {
+            "type": "data.ref",
+            "from": "/metadata/scope",
+            "select": {
+              "by": "name",
+              "value": "bathroom2Motion"
+            }
+          },
+          "is": false,
+          "for": "5min",
+          "suppressFor": "1min"
+        }
+      ],
+      "condition": {
+        "type": "property.state",
+        "source": {
+          "type": "device.property",
+          "deviceId": "dev.bathroom_2.light",
+          "endpointId": 1,
+          "functionCode": "Output",
+          "traitCode": "OnOff"
+        },
+        "is": true
+      },
+      "actions": [
+        {
+          "type": "device.trait.write",
+          "functionCode": "Output",
+          "traitCode": "OnOff",
+          "targets": [
+            {
+              "deviceId": "dev.bathroom_2.light",
+              "endpointIds": [1]
+            }
+          ],
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "主卧开窗自动关空调",
+      "starters": [
+        {
+          "type": "property.event",
+          "source": {
+            "type": "data.ref",
+            "from": "/metadata/scope",
+            "select": {
+              "by": "name",
+              "value": "masterBedroomWindowState"
+            }
+          },
+          "is": true,
+          "for": "30sec",
+          "suppressFor": "5min"
+        }
+      ],
+      "condition": {
+        "type": "property.state",
+        "source": {
+          "type": "device.property",
+          "deviceId": "dev.master_bedroom.ac",
+          "endpointId": 1,
+          "functionCode": "Output",
+          "traitCode": "OnOff"
+        },
+        "is": true
+      },
+      "actions": [
+        {
+          "type": "device.trait.write",
+          "functionCode": "Output",
+          "traitCode": "OnOff",
+          "targets": [
+            {
+              "deviceId": "dev.master_bedroom.ac",
+              "endpointIds": [1]
+            }
+          ],
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "次卧一开窗自动关空调",
+      "starters": [
+        {
+          "type": "property.event",
+          "source": {
+            "type": "data.ref",
+            "from": "/metadata/scope",
+            "select": {
+              "by": "name",
+              "value": "bedroom2WindowState"
+            }
+          },
+          "is": true,
+          "for": "30sec",
+          "suppressFor": "5min"
+        }
+      ],
+      "condition": {
+        "type": "property.state",
+        "source": {
+          "type": "device.property",
+          "deviceId": "dev.bedroom_2.ac",
+          "endpointId": 1,
+          "functionCode": "Output",
+          "traitCode": "OnOff"
+        },
+        "is": true
+      },
+      "actions": [
+        {
+          "type": "device.trait.write",
+          "functionCode": "Output",
+          "traitCode": "OnOff",
+          "targets": [
+            {
+              "deviceId": "dev.bedroom_2.ac",
+              "endpointIds": [1]
+            }
+          ],
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "次卧二开窗自动关空调",
+      "starters": [
+        {
+          "type": "property.event",
+          "source": {
+            "type": "data.ref",
+            "from": "/metadata/scope",
+            "select": {
+              "by": "name",
+              "value": "bedroom3WindowState"
+            }
+          },
+          "is": true,
+          "for": "30sec",
+          "suppressFor": "5min"
+        }
+      ],
+      "condition": {
+        "type": "property.state",
+        "source": {
+          "type": "device.property",
+          "deviceId": "dev.bedroom_3.ac",
+          "endpointId": 1,
+          "functionCode": "Output",
+          "traitCode": "OnOff"
+        },
+        "is": true
+      },
+      "actions": [
+        {
+          "type": "device.trait.write",
+          "functionCode": "Output",
+          "traitCode": "OnOff",
+          "targets": [
+            {
+              "deviceId": "dev.bedroom_3.ac",
+              "endpointIds": [1]
+            }
+          ],
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "客厅开窗自动关空调",
+      "starters": [
+        {
+          "type": "property.event",
+          "source": {
+            "type": "data.ref",
+            "from": "/metadata/scope",
+            "select": {
+              "by": "name",
+              "value": "livingRoomWindowState"
+            }
+          },
+          "is": true,
+          "for": "30sec",
+          "suppressFor": "5min"
+        }
+      ],
+      "condition": {
+        "type": "property.state",
+        "source": {
+          "type": "device.property",
+          "deviceId": "dev.living_room.ac",
+          "endpointId": 1,
+          "functionCode": "Output",
+          "traitCode": "OnOff"
+        },
+        "is": true
+      },
+      "actions": [
+        {
+          "type": "device.trait.write",
+          "functionCode": "Output",
+          "traitCode": "OnOff",
+          "targets": [
+            {
+              "deviceId": "dev.living_room.ac",
+              "endpointIds": [1]
+            }
+          ],
+          "value": false
+        }
+      ]
+    },
+    {
+      "name": "晚间打开阳台门联动客厅灯",
+      "starters": [
+        {
+          "type": "property.event",
+          "source": {
+            "type": "data.ref",
+            "from": "/metadata/scope",
+            "select": {
+              "by": "name",
+              "value": "balconyDoorState"
+            }
+          },
+          "is": true,
+          "for": "3sec",
+          "suppressFor": "20sec"
+        }
+      ],
+      "condition": {
+        "type": "and",
+        "conditions": [
+          {
+            "type": "time.between",
+            "after": "18:00",
+            "before": "06:00"
+          },
+          {
+            "type": "property.state",
+            "source": {
+              "type": "device.property",
+              "deviceId": "dev.living_room.light",
+              "endpointId": 1,
+              "functionCode": "Output",
+              "traitCode": "OnOff"
+            },
+            "is": false
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "device.trait.write",
+          "functionCode": "Output",
+          "traitCode": "OnOff",
+          "targets": [
+            {
+              "deviceId": "dev.living_room.light",
+              "endpointIds": [1]
+            }
+          ],
+          "value": true
+        }
+      ]
+    }
+  ]
+}

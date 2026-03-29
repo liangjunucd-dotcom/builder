@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #080a14;
+  --color-bg-secondary: #0b0e1a;
+  --color-bg-tertiary: #111627;
+  --color-border-subtle: #1a2035;
+  --color-accent: #4f6ef7;
+  --color-accent-hover: #3b5de5;
+  --color-accent-soft: rgba(79, 110, 247, 0.12);
+  --color-text-primary: #f0f2f8;
+  --color-text-secondary: #9ba3b8;
+  --color-text-muted: #4a5168;
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+/* Hide scrollbar but keep scroll (category tabs, horizontal rails) */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Leaflet map dark mode overrides */
+.leaflet-container {
+  background: var(--color-bg-tertiary) !important;
+}
+.leaflet-layer,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out,
+.leaflet-control-attribution {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+/* Glow effects for AI Build */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(79, 110, 247, 0.12), 0 0 60px rgba(99, 102, 241, 0.05); }
+  50% { box-shadow: 0 0 30px rgba(79, 110, 247, 0.2), 0 0 80px rgba(99, 102, 241, 0.08); }
+}
+.glow-purple {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.float-animation {
+  animation: float 4s ease-in-out infinite;
+}

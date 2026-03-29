@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BxmlInstanceConfig version="0.1.0-draft" xmlns="https://space.semantic.model/bxml/v0">
+  <Metadata>
+    <ScenarioName>three-bedroom-home-demo</ScenarioName>
+    <SourceType>user-natural-language</SourceType>
+    <SourceText><![CDATA[帮我构建一个三房一厅，2卫，一个大阳台，每个房间都有单独的灯光空调控制，且安装人体和门窗等传感设备]]></SourceText>
+    <Notes>
+      <Note id="n1">This is a simulated BXML draft generated from natural-language requirements.</Note>
+      <Note id="n2">Bathrooms and balcony are inferred to require lights and motion sensors, but not dedicated air conditioners by default.</Note>
+      <Note id="n3">Door/window sensing is instantiated on the main entrance, balcony sliding door, and one exterior opening per major habitable room.</Note>
+      <Note id="n4">AirConditioner instances are generated from the current device template and trimmed to runtime-core objects: Output, HeaterCooler, FanControl.</Note>
+    </Notes>
+  </Metadata>
+
+  <InferenceSummary spaceCount="9"
+                    structureCount="6"
+                    deviceCount="24"
+                    lightCount="7"
+                    airConditionerCount="4"
+                    motionSensorCount="7"
+                    contactSensorCount="6" />
+
+  <SpaceInstances>
+    <SpaceInstance id="home.demo01" objectTypeRef="Space" displayName="三房一厅住宅" semanticType="Space" />
+    <SpaceInstance id="home.demo01.floor1" objectTypeRef="Floor" displayName="一层" semanticType="Floor" parentRef="home.demo01" />
+    <SpaceInstance id="room.master_bedroom" objectTypeRef="Room" displayName="主卧" semanticType="Room" parentRef="home.demo01.floor1" />
+    <SpaceInstance id="room.bedroom_2" objectTypeRef="Room" displayName="次卧一" semanticType="Room" parentRef="home.demo01.floor1" />
+    <SpaceInstance id="room.bedroom_3" objectTypeRef="Room" displayName="次卧二" semanticType="Room" parentRef="home.demo01.floor1" />
+    <SpaceInstance id="room.living_room" objectTypeRef="Room" displayName="客厅" semanticType="Room" parentRef="home.demo01.floor1" />
+    <SpaceInstance id="room.bathroom_1" objectTypeRef="Room" displayName="卫生间一" semanticType="Room" parentRef="home.demo01.floor1" />
+    <SpaceInstance id="room.bathroom_2" objectTypeRef="Room" displayName="卫生间二" semanticType="Room" parentRef="home.demo01.floor1" />
+    <SpaceInstance id="zone.main_balcony" objectTypeRef="Zone" displayName="大阳台" semanticType="Zone" parentRef="home.demo01.floor1" />
+  </SpaceInstances>
+
+  <StructureInstances>
+    <StructureInstance id="structure.main_entrance_door" objectTypeRef="Door" displayName="入户门" semanticType="Door" parentRef="home.demo01.floor1" />
+    <StructureInstance id="structure.master_bedroom_window" objectTypeRef="Window" displayName="主卧窗" semanticType="Window" parentRef="room.master_bedroom" />
+    <StructureInstance id="structure.bedroom_2_window" objectTypeRef="Window" displayName="次卧一窗" semanticType="Window" parentRef="room.bedroom_2" />
+    <StructureInstance id="structure.bedroom_3_window" objectTypeRef="Window" displayName="次卧二窗" semanticType="Window" parentRef="room.bedroom_3" />
+    <StructureInstance id="structure.living_room_window" objectTypeRef="Window" displayName="客厅窗" semanticType="Window" parentRef="room.living_room" />
+    <StructureInstance id="structure.balcony_sliding_door" objectTypeRef="Door" displayName="阳台推拉门" semanticType="Door" parentRef="room.living_room" />
+  </StructureInstances>
+
+  <DeviceInstances>
+    <DeviceInstance id="dev.master_bedroom.light" templateRef="Light" displayName="主卧主灯" spaceRef="room.master_bedroom" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="Light">
+        <ObjectInstance id="dev.master_bedroom.light.ep1.output" objectTypeRef="Output" functionCode="Output" resolutionState="resolved">
+          <PointInstance id="dev.master_bedroom.light.ep1.output.OnOff" kind="trait" tocCode="OnOff" required="Mandatory" />
+          <PointInstance id="dev.master_bedroom.light.ep1.output.On" kind="command" tocCode="On" required="Optional" />
+          <PointInstance id="dev.master_bedroom.light.ep1.output.Off" kind="command" tocCode="Off" required="Optional" />
+        </ObjectInstance>
+        <ObjectInstance id="dev.master_bedroom.light.ep1.levelControl" objectTypeRef="LevelControl" functionCode="LevelControl" resolutionState="resolved">
+          <PointInstance id="dev.master_bedroom.light.ep1.levelControl.CurrentLevel" kind="trait" tocCode="CurrentLevel" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.bedroom_2.light" templateRef="Light" displayName="次卧一主灯" spaceRef="room.bedroom_2" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="Light">
+        <ObjectInstance id="dev.bedroom_2.light.ep1.output" objectTypeRef="Output" functionCode="Output" resolutionState="resolved">
+          <PointInstance id="dev.bedroom_2.light.ep1.output.OnOff" kind="trait" tocCode="OnOff" required="Mandatory" />
+          <PointInstance id="dev.bedroom_2.light.ep1.output.On" kind="command" tocCode="On" required="Optional" />
+          <PointInstance id="dev.bedroom_2.light.ep1.output.Off" kind="command" tocCode="Off" required="Optional" />
+        </ObjectInstance>
+        <ObjectInstance id="dev.bedroom_2.light.ep1.levelControl" objectTypeRef="LevelControl" functionCode="LevelControl" resolutionState="resolved">
+          <PointInstance id="dev.bedroom_2.light.ep1.levelControl.CurrentLevel" kind="trait" tocCode="CurrentLevel" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.bedroom_3.light" templateRef="Light" displayName="次卧二主灯" spaceRef="room.bedroom_3" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="Light">
+        <ObjectInstance id="dev.bedroom_3.light.ep1.output" objectTypeRef="Output" functionCode="Output" resolutionState="resolved">
+          <PointInstance id="dev.bedroom_3.light.ep1.output.OnOff" kind="trait" tocCode="OnOff" required="Mandatory" />
+          <PointInstance id="dev.bedroom_3.light.ep1.output.On" kind="command" tocCode="On" required="Optional" />
+          <PointInstance id="dev.bedroom_3.light.ep1.output.Off" kind="command" tocCode="Off" required="Optional" />
+        </ObjectInstance>
+        <ObjectInstance id="dev.bedroom_3.light.ep1.levelControl" objectTypeRef="LevelControl" functionCode="LevelControl" resolutionState="resolved">
+          <PointInstance id="dev.bedroom_3.light.ep1.levelControl.CurrentLevel" kind="trait" tocCode="CurrentLevel" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.living_room.light" templateRef="Light" displayName="客厅主灯" spaceRef="room.living_room" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="Light">
+        <ObjectInstance id="dev.living_room.light.ep1.output" objectTypeRef="Output" functionCode="Output" resolutionState="resolved">
+          <PointInstance id="dev.living_room.light.ep1.output.OnOff" kind="trait" tocCode="OnOff" required="Mandatory" />
+          <PointInstance id="dev.living_room.light.ep1.output.On" kind="command" tocCode="On" required="Optional" />
+          <PointInstance id="dev.living_room.light.ep1.output.Off" kind="command" tocCode="Off" required="Optional" />
+        </ObjectInstance>
+        <ObjectInstance id="dev.living_room.light.ep1.levelControl" objectTypeRef="LevelControl" functionCode="LevelControl" resolutionState="resolved">
+          <PointInstance id="dev.living_room.light.ep1.levelControl.CurrentLevel" kind="trait" tocCode="CurrentLevel" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.bathroom_1.light" templateRef="Light" displayName="卫生间一灯" spaceRef="room.bathroom_1" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="Light">
+        <ObjectInstance id="dev.bathroom_1.light.ep1.output" objectTypeRef="Output" functionCode="Output" resolutionState="resolved">
+          <PointInstance id="dev.bathroom_1.light.ep1.output.OnOff" kind="trait" tocCode="OnOff" required="Mandatory" />
+          <PointInstance id="dev.bathroom_1.light.ep1.output.On" kind="command" tocCode="On" required="Optional" />
+          <PointInstance id="dev.bathroom_1.light.ep1.output.Off" kind="command" tocCode="Off" required="Optional" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.bathroom_2.light" templateRef="Light" displayName="卫生间二灯" spaceRef="room.bathroom_2" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="Light">
+        <ObjectInstance id="dev.bathroom_2.light.ep1.output" objectTypeRef="Output" functionCode="Output" resolutionState="resolved">
+          <PointInstance id="dev.bathroom_2.light.ep1.output.OnOff" kind="trait" tocCode="OnOff" required="Mandatory" />
+          <PointInstance id="dev.bathroom_2.light.ep1.output.On" kind="command" tocCode="On" required="Optional" />
+          <PointInstance id="dev.bathroom_2.light.ep1.output.Off" kind="command" tocCode="Off" required="Optional" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.main_balcony.light" templateRef="Light" displayName="阳台灯" spaceRef="zone.main_balcony" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="Light">
+        <ObjectInstance id="dev.main_balcony.light.ep1.output" objectTypeRef="Output" functionCode="Output" resolutionState="resolved">
+          <PointInstance id="dev.main_balcony.light.ep1.output.OnOff" kind="trait" tocCode="OnOff" required="Mandatory" />
+          <PointInstance id="dev.main_balcony.light.ep1.output.On" kind="command" tocCode="On" required="Optional" />
+          <PointInstance id="dev.main_balcony.light.ep1.output.Off" kind="command" tocCode="Off" required="Optional" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+
+    <DeviceInstance id="dev.master_bedroom.ac" templateRef="AirConditioner" displayName="主卧空调" spaceRef="room.master_bedroom" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="AirConditioner">
+        <ObjectInstance id="dev.master_bedroom.ac.ep1.output" objectTypeRef="Output" functionCode="Output" resolutionState="resolved">
+          <PointInstance id="dev.master_bedroom.ac.ep1.output.OnOff" kind="trait" tocCode="OnOff" required="Mandatory" />
+        </ObjectInstance>
+        <ObjectInstance id="dev.master_bedroom.ac.ep1.heaterCooler" objectTypeRef="HeaterCooler" functionCode="HeaterCooler" resolutionState="resolved">
+          <PointInstance id="dev.master_bedroom.ac.ep1.heaterCooler.HeaterCoolerMode" kind="trait" tocCode="HeaterCoolerMode" required="Mandatory" />
+          <PointInstance id="dev.master_bedroom.ac.ep1.heaterCooler.CoolingTemperature" kind="trait" tocCode="CoolingTemperature" required="Optional" />
+          <PointInstance id="dev.master_bedroom.ac.ep1.heaterCooler.HeatingTemperature" kind="trait" tocCode="HeatingTemperature" required="Optional" />
+          <PointInstance id="dev.master_bedroom.ac.ep1.heaterCooler.CurrentTemperature" kind="trait" tocCode="CurrentTemperature" required="Optional" />
+        </ObjectInstance>
+        <ObjectInstance id="dev.master_bedroom.ac.ep1.fanControl" objectTypeRef="FanControl" functionCode="FanControl" resolutionState="resolved">
+          <PointInstance id="dev.master_bedroom.ac.ep1.fanControl.FanMode" kind="trait" tocCode="FanMode" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.bedroom_2.ac" templateRef="AirConditioner" displayName="次卧一空调" spaceRef="room.bedroom_2" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="AirConditioner">
+        <ObjectInstance id="dev.bedroom_2.ac.ep1.output" objectTypeRef="Output" functionCode="Output" resolutionState="resolved">
+          <PointInstance id="dev.bedroom_2.ac.ep1.output.OnOff" kind="trait" tocCode="OnOff" required="Mandatory" />
+        </ObjectInstance>
+        <ObjectInstance id="dev.bedroom_2.ac.ep1.heaterCooler" objectTypeRef="HeaterCooler" functionCode="HeaterCooler" resolutionState="resolved">
+          <PointInstance id="dev.bedroom_2.ac.ep1.heaterCooler.HeaterCoolerMode" kind="trait" tocCode="HeaterCoolerMode" required="Mandatory" />
+          <PointInstance id="dev.bedroom_2.ac.ep1.heaterCooler.CoolingTemperature" kind="trait" tocCode="CoolingTemperature" required="Optional" />
+          <PointInstance id="dev.bedroom_2.ac.ep1.heaterCooler.HeatingTemperature" kind="trait" tocCode="HeatingTemperature" required="Optional" />
+          <PointInstance id="dev.bedroom_2.ac.ep1.heaterCooler.CurrentTemperature" kind="trait" tocCode="CurrentTemperature" required="Optional" />
+        </ObjectInstance>
+        <ObjectInstance id="dev.bedroom_2.ac.ep1.fanControl" objectTypeRef="FanControl" functionCode="FanControl" resolutionState="resolved">
+          <PointInstance id="dev.bedroom_2.ac.ep1.fanControl.FanMode" kind="trait" tocCode="FanMode" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.bedroom_3.ac" templateRef="AirConditioner" displayName="次卧二空调" spaceRef="room.bedroom_3" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="AirConditioner">
+        <ObjectInstance id="dev.bedroom_3.ac.ep1.output" objectTypeRef="Output" functionCode="Output" resolutionState="resolved">
+          <PointInstance id="dev.bedroom_3.ac.ep1.output.OnOff" kind="trait" tocCode="OnOff" required="Mandatory" />
+        </ObjectInstance>
+        <ObjectInstance id="dev.bedroom_3.ac.ep1.heaterCooler" objectTypeRef="HeaterCooler" functionCode="HeaterCooler" resolutionState="resolved">
+          <PointInstance id="dev.bedroom_3.ac.ep1.heaterCooler.HeaterCoolerMode" kind="trait" tocCode="HeaterCoolerMode" required="Mandatory" />
+          <PointInstance id="dev.bedroom_3.ac.ep1.heaterCooler.CoolingTemperature" kind="trait" tocCode="CoolingTemperature" required="Optional" />
+          <PointInstance id="dev.bedroom_3.ac.ep1.heaterCooler.HeatingTemperature" kind="trait" tocCode="HeatingTemperature" required="Optional" />
+          <PointInstance id="dev.bedroom_3.ac.ep1.heaterCooler.CurrentTemperature" kind="trait" tocCode="CurrentTemperature" required="Optional" />
+        </ObjectInstance>
+        <ObjectInstance id="dev.bedroom_3.ac.ep1.fanControl" objectTypeRef="FanControl" functionCode="FanControl" resolutionState="resolved">
+          <PointInstance id="dev.bedroom_3.ac.ep1.fanControl.FanMode" kind="trait" tocCode="FanMode" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.living_room.ac" templateRef="AirConditioner" displayName="客厅空调" spaceRef="room.living_room" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="AirConditioner">
+        <ObjectInstance id="dev.living_room.ac.ep1.output" objectTypeRef="Output" functionCode="Output" resolutionState="resolved">
+          <PointInstance id="dev.living_room.ac.ep1.output.OnOff" kind="trait" tocCode="OnOff" required="Mandatory" />
+        </ObjectInstance>
+        <ObjectInstance id="dev.living_room.ac.ep1.heaterCooler" objectTypeRef="HeaterCooler" functionCode="HeaterCooler" resolutionState="resolved">
+          <PointInstance id="dev.living_room.ac.ep1.heaterCooler.HeaterCoolerMode" kind="trait" tocCode="HeaterCoolerMode" required="Mandatory" />
+          <PointInstance id="dev.living_room.ac.ep1.heaterCooler.CoolingTemperature" kind="trait" tocCode="CoolingTemperature" required="Optional" />
+          <PointInstance id="dev.living_room.ac.ep1.heaterCooler.HeatingTemperature" kind="trait" tocCode="HeatingTemperature" required="Optional" />
+          <PointInstance id="dev.living_room.ac.ep1.heaterCooler.CurrentTemperature" kind="trait" tocCode="CurrentTemperature" required="Optional" />
+        </ObjectInstance>
+        <ObjectInstance id="dev.living_room.ac.ep1.fanControl" objectTypeRef="FanControl" functionCode="FanControl" resolutionState="resolved">
+          <PointInstance id="dev.living_room.ac.ep1.fanControl.FanMode" kind="trait" tocCode="FanMode" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+
+    <DeviceInstance id="dev.master_bedroom.motion" templateRef="MotionSensor" displayName="主卧人体传感器" spaceRef="room.master_bedroom" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="MotionSensor">
+        <ObjectInstance id="dev.master_bedroom.motion.ep1.occupancy" objectTypeRef="OccupancySensing" functionCode="OccupancySensing" resolutionState="resolved">
+          <PointInstance id="dev.master_bedroom.motion.ep1.occupancy.Occupancy" kind="trait" tocCode="Occupancy" required="Mandatory" />
+          <PointInstance id="dev.master_bedroom.motion.ep1.occupancy.OccupancySensorType" kind="trait" tocCode="OccupancySensorType" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.bedroom_2.motion" templateRef="MotionSensor" displayName="次卧一人体传感器" spaceRef="room.bedroom_2" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="MotionSensor">
+        <ObjectInstance id="dev.bedroom_2.motion.ep1.occupancy" objectTypeRef="OccupancySensing" functionCode="OccupancySensing" resolutionState="resolved">
+          <PointInstance id="dev.bedroom_2.motion.ep1.occupancy.Occupancy" kind="trait" tocCode="Occupancy" required="Mandatory" />
+          <PointInstance id="dev.bedroom_2.motion.ep1.occupancy.OccupancySensorType" kind="trait" tocCode="OccupancySensorType" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.bedroom_3.motion" templateRef="MotionSensor" displayName="次卧二人体传感器" spaceRef="room.bedroom_3" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="MotionSensor">
+        <ObjectInstance id="dev.bedroom_3.motion.ep1.occupancy" objectTypeRef="OccupancySensing" functionCode="OccupancySensing" resolutionState="resolved">
+          <PointInstance id="dev.bedroom_3.motion.ep1.occupancy.Occupancy" kind="trait" tocCode="Occupancy" required="Mandatory" />
+          <PointInstance id="dev.bedroom_3.motion.ep1.occupancy.OccupancySensorType" kind="trait" tocCode="OccupancySensorType" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.living_room.motion" templateRef="MotionSensor" displayName="客厅人体传感器" spaceRef="room.living_room" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="MotionSensor">
+        <ObjectInstance id="dev.living_room.motion.ep1.occupancy" objectTypeRef="OccupancySensing" functionCode="OccupancySensing" resolutionState="resolved">
+          <PointInstance id="dev.living_room.motion.ep1.occupancy.Occupancy" kind="trait" tocCode="Occupancy" required="Mandatory" />
+          <PointInstance id="dev.living_room.motion.ep1.occupancy.OccupancySensorType" kind="trait" tocCode="OccupancySensorType" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.bathroom_1.motion" templateRef="MotionSensor" displayName="卫生间一人体传感器" spaceRef="room.bathroom_1" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="MotionSensor">
+        <ObjectInstance id="dev.bathroom_1.motion.ep1.occupancy" objectTypeRef="OccupancySensing" functionCode="OccupancySensing" resolutionState="resolved">
+          <PointInstance id="dev.bathroom_1.motion.ep1.occupancy.Occupancy" kind="trait" tocCode="Occupancy" required="Mandatory" />
+          <PointInstance id="dev.bathroom_1.motion.ep1.occupancy.OccupancySensorType" kind="trait" tocCode="OccupancySensorType" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.bathroom_2.motion" templateRef="MotionSensor" displayName="卫生间二人体传感器" spaceRef="room.bathroom_2" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="MotionSensor">
+        <ObjectInstance id="dev.bathroom_2.motion.ep1.occupancy" objectTypeRef="OccupancySensing" functionCode="OccupancySensing" resolutionState="resolved">
+          <PointInstance id="dev.bathroom_2.motion.ep1.occupancy.Occupancy" kind="trait" tocCode="Occupancy" required="Mandatory" />
+          <PointInstance id="dev.bathroom_2.motion.ep1.occupancy.OccupancySensorType" kind="trait" tocCode="OccupancySensorType" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.main_balcony.motion" templateRef="MotionSensor" displayName="阳台人体传感器" spaceRef="zone.main_balcony" placementRelation="isInstalledIn">
+      <Endpoint id="1" name="main" deviceType="MotionSensor">
+        <ObjectInstance id="dev.main_balcony.motion.ep1.occupancy" objectTypeRef="OccupancySensing" functionCode="OccupancySensing" resolutionState="resolved">
+          <PointInstance id="dev.main_balcony.motion.ep1.occupancy.Occupancy" kind="trait" tocCode="Occupancy" required="Mandatory" />
+          <PointInstance id="dev.main_balcony.motion.ep1.occupancy.OccupancySensorType" kind="trait" tocCode="OccupancySensorType" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+
+    <DeviceInstance id="dev.main_entrance.contact" templateRef="ContactSensor" displayName="入户门门磁" spaceRef="home.demo01.floor1" placementRelation="isInstalledOn" structureRef="structure.main_entrance_door">
+      <Endpoint id="1" name="main" deviceType="ContactSensor">
+        <ObjectInstance id="dev.main_entrance.contact.ep1.contact" objectTypeRef="Contact" functionCode="Contact" resolutionState="resolved">
+          <PointInstance id="dev.main_entrance.contact.ep1.contact.ContactSensorState" kind="trait" tocCode="ContactSensorState" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.master_bedroom.window_contact" templateRef="ContactSensor" displayName="主卧窗磁" spaceRef="room.master_bedroom" placementRelation="isInstalledOn" structureRef="structure.master_bedroom_window">
+      <Endpoint id="1" name="main" deviceType="ContactSensor">
+        <ObjectInstance id="dev.master_bedroom.window_contact.ep1.contact" objectTypeRef="Contact" functionCode="Contact" resolutionState="resolved">
+          <PointInstance id="dev.master_bedroom.window_contact.ep1.contact.ContactSensorState" kind="trait" tocCode="ContactSensorState" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.bedroom_2.window_contact" templateRef="ContactSensor" displayName="次卧一窗磁" spaceRef="room.bedroom_2" placementRelation="isInstalledOn" structureRef="structure.bedroom_2_window">
+      <Endpoint id="1" name="main" deviceType="ContactSensor">
+        <ObjectInstance id="dev.bedroom_2.window_contact.ep1.contact" objectTypeRef="Contact" functionCode="Contact" resolutionState="resolved">
+          <PointInstance id="dev.bedroom_2.window_contact.ep1.contact.ContactSensorState" kind="trait" tocCode="ContactSensorState" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.bedroom_3.window_contact" templateRef="ContactSensor" displayName="次卧二窗磁" spaceRef="room.bedroom_3" placementRelation="isInstalledOn" structureRef="structure.bedroom_3_window">
+      <Endpoint id="1" name="main" deviceType="ContactSensor">
+        <ObjectInstance id="dev.bedroom_3.window_contact.ep1.contact" objectTypeRef="Contact" functionCode="Contact" resolutionState="resolved">
+          <PointInstance id="dev.bedroom_3.window_contact.ep1.contact.ContactSensorState" kind="trait" tocCode="ContactSensorState" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.living_room.window_contact" templateRef="ContactSensor" displayName="客厅窗磁" spaceRef="room.living_room" placementRelation="isInstalledOn" structureRef="structure.living_room_window">
+      <Endpoint id="1" name="main" deviceType="ContactSensor">
+        <ObjectInstance id="dev.living_room.window_contact.ep1.contact" objectTypeRef="Contact" functionCode="Contact" resolutionState="resolved">
+          <PointInstance id="dev.living_room.window_contact.ep1.contact.ContactSensorState" kind="trait" tocCode="ContactSensorState" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+    <DeviceInstance id="dev.balcony_door.contact" templateRef="ContactSensor" displayName="阳台门磁" spaceRef="room.living_room" placementRelation="isInstalledOn" structureRef="structure.balcony_sliding_door">
+      <Endpoint id="1" name="main" deviceType="ContactSensor">
+        <ObjectInstance id="dev.balcony_door.contact.ep1.contact" objectTypeRef="Contact" functionCode="Contact" resolutionState="resolved">
+          <PointInstance id="dev.balcony_door.contact.ep1.contact.ContactSensorState" kind="trait" tocCode="ContactSensorState" required="Mandatory" />
+        </ObjectInstance>
+      </Endpoint>
+    </DeviceInstance>
+  </DeviceInstances>
+
+  <Relations>
+    <Relation id="rel.floor.belongs_to.home" relationType="belongsTo" sourceRef="home.demo01.floor1" targetRef="home.demo01" />
+    <Relation id="rel.master.belongs_to.floor1" relationType="belongsTo" sourceRef="room.master_bedroom" targetRef="home.demo01.floor1" />
+    <Relation id="rel.b2.belongs_to.floor1" relationType="belongsTo" sourceRef="room.bedroom_2" targetRef="home.demo01.floor1" />
+    <Relation id="rel.b3.belongs_to.floor1" relationType="belongsTo" sourceRef="room.bedroom_3" targetRef="home.demo01.floor1" />
+    <Relation id="rel.living.belongs_to.floor1" relationType="belongsTo" sourceRef="room.living_room" targetRef="home.demo01.floor1" />
+    <Relation id="rel.bath1.belongs_to.floor1" relationType="belongsTo" sourceRef="room.bathroom_1" targetRef="home.demo01.floor1" />
+    <Relation id="rel.bath2.belongs_to.floor1" relationType="belongsTo" sourceRef="room.bathroom_2" targetRef="home.demo01.floor1" />
+    <Relation id="rel.balcony.belongs_to.floor1" relationType="belongsTo" sourceRef="zone.main_balcony" targetRef="home.demo01.floor1" />
+
+    <Relation id="rel.dev.master_light.in.master" relationType="isInstalledIn" sourceRef="dev.master_bedroom.light" targetRef="room.master_bedroom" />
+    <Relation id="rel.dev.b2_light.in.b2" relationType="isInstalledIn" sourceRef="dev.bedroom_2.light" targetRef="room.bedroom_2" />
+    <Relation id="rel.dev.b3_light.in.b3" relationType="isInstalledIn" sourceRef="dev.bedroom_3.light" targetRef="room.bedroom_3" />
+    <Relation id="rel.dev.living_light.in.living" relationType="isInstalledIn" sourceRef="dev.living_room.light" targetRef="room.living_room" />
+    <Relation id="rel.dev.bath1_light.in.bath1" relationType="isInstalledIn" sourceRef="dev.bathroom_1.light" targetRef="room.bathroom_1" />
+    <Relation id="rel.dev.bath2_light.in.bath2" relationType="isInstalledIn" sourceRef="dev.bathroom_2.light" targetRef="room.bathroom_2" />
+    <Relation id="rel.dev.balcony_light.in.balcony" relationType="isInstalledIn" sourceRef="dev.main_balcony.light" targetRef="zone.main_balcony" />
+
+    <Relation id="rel.dev.master_ac.in.master" relationType="isInstalledIn" sourceRef="dev.master_bedroom.ac" targetRef="room.master_bedroom" />
+    <Relation id="rel.dev.b2_ac.in.b2" relationType="isInstalledIn" sourceRef="dev.bedroom_2.ac" targetRef="room.bedroom_2" />
+    <Relation id="rel.dev.b3_ac.in.b3" relationType="isInstalledIn" sourceRef="dev.bedroom_3.ac" targetRef="room.bedroom_3" />
+    <Relation id="rel.dev.living_ac.in.living" relationType="isInstalledIn" sourceRef="dev.living_room.ac" targetRef="room.living_room" />
+
+    <Relation id="rel.dev.main_contact.on.entry" relationType="isInstalledOn" sourceRef="dev.main_entrance.contact" targetRef="structure.main_entrance_door" />
+    <Relation id="rel.dev.master_contact.on.window" relationType="isInstalledOn" sourceRef="dev.master_bedroom.window_contact" targetRef="structure.master_bedroom_window" />
+    <Relation id="rel.dev.b2_contact.on.window" relationType="isInstalledOn" sourceRef="dev.bedroom_2.window_contact" targetRef="structure.bedroom_2_window" />
+    <Relation id="rel.dev.b3_contact.on.window" relationType="isInstalledOn" sourceRef="dev.bedroom_3.window_contact" targetRef="structure.bedroom_3_window" />
+    <Relation id="rel.dev.living_contact.on.window" relationType="isInstalledOn" sourceRef="dev.living_room.window_contact" targetRef="structure.living_room_window" />
+    <Relation id="rel.dev.balcony_contact.on.door" relationType="isInstalledOn" sourceRef="dev.balcony_door.contact" targetRef="structure.balcony_sliding_door" />
+  </Relations>
+
+  <ValidationSummary>
+    <Check id="c1" status="pass">All inferred devices reference valid DeviceTemplate ids in the current device-semantic-model.xml.</Check>
+    <Check id="c2" status="pass">Each main habitable room has an independent light and air-conditioner instance.</Check>
+    <Check id="c3" status="pass">Each room or major area has a motion-sensor instance.</Check>
+    <Check id="c4" status="pass">Each contact sensor is attached to a concrete door/window structure instance.</Check>
+    <Check id="c5" status="warning">Bathroom air-conditioner instances are not generated by default and should be confirmed project by project.</Check>
+    <Check id="c6" status="warning">The exact count of windows and the final device model codes still require user confirmation.</Check>
+  </ValidationSummary>
+
+  <PendingConfirmations>
+    <Item id="p1" topic="bathroom-air-conditioner">Confirm whether the two bathrooms also require dedicated air-conditioner instances.</Item>
+    <Item id="p2" topic="window-count">Confirm actual window count per room to expand contact-sensor coverage beyond the minimum set.</Item>
+    <Item id="p3" topic="product-models">Confirm the final Aqara model codes for lights, air conditioners, motion sensors, and contact sensors.</Item>
+    <Item id="p4" topic="installation-detail">Confirm whether air conditioners should be linked to wall structures instead of only room-level placement.</Item>
+  </PendingConfirmations>
+</BxmlInstanceConfig>

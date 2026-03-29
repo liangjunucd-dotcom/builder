@@ -1,0 +1,1044 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deviceModelTemplate modelCode="app.group.color" style="enhanced">
+    <!-- Auto-generated from AqaraSpec workbook. -->
+    <!-- Protocol is set to other because this app-level group model has no explicit protocol column in the source sheet. -->
+    <metadata>
+        <source file="AqaraSpec设备实例化配置-20260325.xlsx" sheet="设备Spec实例化"/>
+        <generatedModel code="app.group.color" productName="彩灯组" functionCount="41" endpointCount="3"/>
+    </metadata>
+
+    <!-- AssetModel -->
+    <p n="app.group.color" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.model.app.group.color">
+        <p n="semanticType" t="a:String" f="r" v="AssetModel" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="彩灯组设备模型定义。" x="Mgr=s:libCnf"/>
+        <p n="category" t="a:DynamicEnum" v="1@{hvac=0,lighting=1,security=2,energy=3,custom=4}" x="Mgr=s:libCnf"/>
+        <p n="version" t="a:String" v="1.0.0" x="Mgr=s:libCnf"/>
+        <p n="status" t="a:DynamicEnum" v="0@{draft=0,active=1,deprecated=2}" x="Mgr=s:libCnf"/>
+        <p n="modelCode" t="a:String" v="app.group.color" x="Mgr=s:libCnf"/>
+        <p n="productName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="vendor" t="a:String" v="Aqara" x="Mgr=s:libCnf"/>
+        <p n="deviceSemanticType" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="sourceSpec" t="a:String" v="AqaraSpec设备实例化配置-20260325.xlsx + Aqara Spec Part III/IV/V" x="Mgr=s:libCnf"/>
+        <p n="endpointCount" t="a:SignalInteger" v="3" x="Mgr=s:libCnf"/>
+    </p>
+
+    <!-- Endpoint summary -->
+    <endpoint id="0" name="根节点" deviceTypes="Root" functionCount="22"/>
+    <endpoint id="1" name="公共节点" deviceTypes="Public" functionCount="4"/>
+    <endpoint id="2" name="彩灯组" deviceTypes="Light" functionCount="15"/>
+
+    <!-- DeviceFunction entries -->
+    <p n="app.group.color_0_DeviceID" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.DeviceID">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备基本信息-设备ID，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="DeviceID" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="设备ID" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="BasicInformation" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备基本信息" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="文本" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="String" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_FirmwareRevision" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.FirmwareRevision">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备基本信息-固件版本，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="FirmwareRevision" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="固件版本" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="BasicInformation" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备基本信息" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="数值" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Uint32" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_HardwareVersion" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.HardwareVersion">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备基本信息-硬件版本，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="HardwareVersion" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="硬件版本" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="BasicInformation" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备基本信息" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="数值" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Uint32" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_Location" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.Location">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备基本信息-地区，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="Location" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="地区" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="BasicInformation" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备基本信息" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="文本" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="String" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_Mac" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.Mac">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备基本信息-Mac地址，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="Mac" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="Mac地址" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="BasicInformation" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备基本信息" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="文本" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="String" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_ProductName" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.ProductName">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备基本信息-产品名称，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="ProductName" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="产品名称" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="BasicInformation" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备基本信息" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="文本" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="String" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_Reachable" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.Reachable">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备基本信息-连接状态，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="Reachable" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="连接状态" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="BasicInformation" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备基本信息" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="布尔" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Bool" x="Mgr=s:libCnf"/>
+        <p n="enumSpec" t="a:String" v="[{&quot;key&quot;:&quot;Offline&quot;,&quot;value&quot;:&quot;0&quot;},{&quot;key&quot;:&quot;Online&quot;,&quot;value&quot;:&quot;1&quot;}]" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="即在manager服务处理，又在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="sourcePath" t="a:String" v="8.0.2045" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_SerialNumber" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.SerialNumber">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备基本信息-序列号，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="SerialNumber" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="序列号" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="BasicInformation" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备基本信息" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="文本" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="String" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_VendorID" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.VendorID">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备基本信息-厂商ID，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="VendorID" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="厂商ID" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="BasicInformation" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备基本信息" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="文本" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="String" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_VendorName" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.VendorName">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备基本信息-厂商名，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="VendorName" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="厂商名" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="BasicInformation" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备基本信息" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="文本" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="String" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_EndpointArray" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointArray">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备功能描述-节点数组，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointArray" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="节点数组" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="Descriptor" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备功能描述" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="其他" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Array" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="[0,1,2]" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_EndpointCount" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointCount">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备功能描述-节点数量，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointCount" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="节点数量" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="Descriptor" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备功能描述" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="数值" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Int32" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="3" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_EndpointDeviceTypes" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointDeviceTypes">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备功能描述-节点设备类型，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointDeviceTypes" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="节点设备类型" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="Descriptor" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备功能描述" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="其他" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Array" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="[&quot;Root&quot;,&quot;Public&quot;,&quot;Light&quot;]" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_EndpointDynamicCount" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointDynamicCount">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备功能描述-动态模式数量，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointDynamicCount" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="动态模式数量" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="Descriptor" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备功能描述" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="数值" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Int32" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="1" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_EndpointFunctions" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointFunctions">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备功能描述-节点功能，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointFunctions" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="节点功能" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="Descriptor" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备功能描述" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="其他" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Array" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_SelectedEndpointDynamic" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.SelectedEndpointDynamic">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备功能描述-当前模式，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="SelectedEndpointDynamic" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="当前模式" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="Descriptor" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备功能描述" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="数值" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Int32" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="不在manager服务处理，仅在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_SupportedEndpointDynamic" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.SupportedEndpointDynamic">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="设备功能描述-支持动态模式，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="SupportedEndpointDynamic" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="支持动态模式" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="Descriptor" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="设备功能描述" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="布尔" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Bool" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="0" x="Mgr=s:libCnf"/>
+        <p n="enumSpec" t="a:String" v="[{&quot;key&quot;:&quot;False&quot;,&quot;name&quot;:&quot;False&quot;,&quot;value&quot;:&quot;0&quot;},{&quot;key&quot;:&quot;True&quot;,&quot;name&quot;:&quot;True&quot;,&quot;value&quot;:&quot;1&quot;}]" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_EndpointName" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointName">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="节点标签-设备或卡片名称，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointName" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="设备或卡片名称" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="EndpointLabel" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="节点标签" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="文本" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="String" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="sourcePath" t="a:String" v="8.0.8101" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_EndpointRoom" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointRoom">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="节点标签-设备或卡片所属位置id，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointRoom" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="设备或卡片所属位置id" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="EndpointLabel" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="节点标签" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="文本" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="String" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="sourcePath" t="a:String" v="8.0.8108" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_EndpointRoomName" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointRoomName">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="节点标签-设备或卡片所属房间名称，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointRoomName" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="设备或卡片所属房间名称" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="EndpointLabel" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="节点标签" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="文本" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="String" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="sourcePath" t="a:String" v="8.0.8102" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_EndpointStatistics" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointStatistics">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="节点标签-节点统计，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointStatistics" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="节点统计" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="EndpointLabel" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="节点标签" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="布尔" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Bool" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="0" x="Mgr=s:libCnf"/>
+        <p n="enumSpec" t="a:String" v="[{&quot;key&quot;:&quot;False&quot;,&quot;name&quot;:&quot;False&quot;,&quot;value&quot;:&quot;0&quot;},{&quot;key&quot;:&quot;True&quot;,&quot;name&quot;:&quot;True&quot;,&quot;value&quot;:&quot;1&quot;}]" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_0_EndpointVisibility" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointVisibility">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="节点标签-节点可见性，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointVisibility" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="节点可见性" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="EndpointLabel" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="节点标签" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="0" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="根节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Root" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="布尔" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Bool" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="0" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_1_EndpointVisibility" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointVisibility">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="节点标签-节点可见性，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointVisibility" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="节点可见性" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="EndpointLabel" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="节点标签" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="1" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="公共节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Public" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="布尔" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Bool" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="0" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_1_Identify" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.Identify">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="识别-识别，来源于 Aqara Spec 命令定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="Identify" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="识别" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="command" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="command" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="Identify" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="识别" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="1" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="公共节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Public" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="1@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="false" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="未知数据类型" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="不在manager服务处理，仅在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_1_IdentifyTime" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.IdentifyTime">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="识别-识别时间，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="IdentifyTime" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="识别时间" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="Identify" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="识别" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="1" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="公共节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Public" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="数值" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Float" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="不在manager服务处理，仅在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_1_IdentifyType" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.IdentifyType">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="识别-识别类型，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="IdentifyType" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="识别类型" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="Identify" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="识别" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="1" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="公共节点" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Public" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="枚举" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Uint8" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="不在manager服务处理，仅在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_StepColorTemperature" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.StepColorTemperature">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="颜色控制-色温增量调节，来源于 Aqara Spec 命令定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="StepColorTemperature" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="色温增量调节" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="command" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="command" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="ColorControl" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="颜色控制" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="false" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="未知数据类型" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="不在manager服务处理，仅在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="sourcePath" t="a:String" v="1.11.85" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_ColorMode" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.ColorMode">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="颜色控制-颜色模式，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="ColorMode" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="颜色模式" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="ColorControl" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="颜色控制" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="枚举" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Uint8" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="1" x="Mgr=s:libCnf"/>
+        <p n="enumSpec" t="a:String" v="[{&quot;key&quot;:&quot;XYColor&quot;,&quot;value&quot;:&quot;1&quot;}]" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_ColorTemperature" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.ColorTemperature">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="颜色控制-色温值，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="ColorTemperature" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="色温值" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="ColorControl" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="颜色控制" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="数值" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Uint32" x="Mgr=s:libCnf"/>
+        <p n="minValue" t="a:String" v="153" x="Mgr=s:libCnf"/>
+        <p n="maxValue" t="a:String" v="370" x="Mgr=s:libCnf"/>
+        <p n="stepValue" t="a:String" v="1" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="不在manager服务处理，仅在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="sourcePath" t="a:String" v="1.4.85" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_ColorXY" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.ColorXY">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="颜色控制-颜色值XY，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="ColorXY" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="颜色值XY" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="ColorControl" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="颜色控制" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="数值" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Uint32" x="Mgr=s:libCnf"/>
+        <p n="minValue" t="a:String" v="0" x="Mgr=s:libCnf"/>
+        <p n="maxValue" t="a:String" v="4294967296" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="不在manager服务处理，仅在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="sourcePath" t="a:String" v="1.15.85" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_CurrentX" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.CurrentX">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="颜色控制-X值，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="CurrentX" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="X值" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="ColorControl" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="颜色控制" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="数值" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Uint16" x="Mgr=s:libCnf"/>
+        <p n="minValue" t="a:String" v="0" x="Mgr=s:libCnf"/>
+        <p n="maxValue" t="a:String" v="65279" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="不在manager服务处理，仅在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="sourcePath" t="a:String" v="1.15.85" x="Mgr=s:libCnf"/>
+        <p n="handler" t="a:String" v="colorXYtransformService" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_CurrentY" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.CurrentY">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="颜色控制-Y值，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="CurrentY" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="Y值" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="ColorControl" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="颜色控制" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="数值" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Uint16" x="Mgr=s:libCnf"/>
+        <p n="minValue" t="a:String" v="0" x="Mgr=s:libCnf"/>
+        <p n="maxValue" t="a:String" v="65279" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="不在manager服务处理，仅在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="sourcePath" t="a:String" v="1.15.85" x="Mgr=s:libCnf"/>
+        <p n="handler" t="a:String" v="colorXYtransformService" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_EndpointIcon" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointIcon">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="节点标签-节点图标，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointIcon" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="节点图标" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="EndpointLabel" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="节点标签" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="其他" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="String" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="light_group" x="Mgr=s:libCnf"/>
+        <p n="enumSpec" t="a:String" v="[{&quot;value&quot;:&quot;light_group&quot;},{&quot;value&quot;:&quot;light_bulb&quot;},{&quot;value&quot;:&quot;ceiling_light&quot;},{&quot;value&quot;:&quot;ceiling_light_a&quot;},{&quot;value&quot;:&quot;chandelier_a&quot;},{&quot;value&quot;:&quot;chandelier_b&quot;},{&quot;value&quot;:&quot;chandelier_c&quot;},{&quot;value&quot;:&quot;floor_lamp&quot;},{&quot;value&quot;:&quot;table_lamp_a&quot;},{&quot;value&quot;:&quot;table_lamp_b&quot;},{&quot;value&quot;:&quot;spotlight_a&quot;},{&quot;value&quot;:&quot;spotlight_b&quot;},{&quot;value&quot;:&quot;strip_light&quot;},{&quot;value&quot;:&quot;string_light&quot;},{&quot;value&quot;:&quot;panel_light&quot;},{&quot;value&quot;:&quot;track_lighting&quot;},{&quot;value&quot;:&quot;column_light&quot;},{&quot;value&quot;:&quot;floor_lamp_a&quot;},{&quot;value&quot;:&quot;downlights_light&quot;},{&quot;value&quot;:&quot;wall_lamp&quot;},{&quot;value&quot;:&quot;ceiling_light_b&quot;},{&quot;value&quot;:&quot;child_lamp&quot;},{&quot;value&quot;:&quot;grille_lamp&quot;},{&quot;value&quot;:&quot;art_lamp&quot;}]" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_EndpointName" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointName">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="节点标签-设备或卡片名称，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointName" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="设备或卡片名称" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="EndpointLabel" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="节点标签" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="文本" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="String" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_EndpointStatistics" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointStatistics">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="节点标签-节点统计，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointStatistics" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="节点统计" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="EndpointLabel" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="节点标签" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="布尔" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Bool" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="0" x="Mgr=s:libCnf"/>
+        <p n="enumSpec" t="a:String" v="[{&quot;key&quot;:&quot;False&quot;,&quot;name&quot;:&quot;False&quot;,&quot;value&quot;:&quot;0&quot;},{&quot;key&quot;:&quot;True&quot;,&quot;name&quot;:&quot;True&quot;,&quot;value&quot;:&quot;1&quot;}]" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_EndpointVisibility" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.EndpointVisibility">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="节点标签-节点可见性，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="EndpointVisibility" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="节点可见性" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="EndpointLabel" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="节点标签" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="布尔" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Bool" x="Mgr=s:libCnf"/>
+        <p n="defaultValue" t="a:String" v="1" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="仅在manager服务处理，不在device服务处理" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_StepBrightness" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.StepBrightness">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="亮度控制-亮度增量调节，来源于 Aqara Spec 命令定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="StepBrightness" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="亮度增量调节" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="command" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="command" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="LevelControl" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="亮度控制" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="0@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="false" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="未知数据类型" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="不在manager服务处理，仅在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="sourcePath" t="a:String" v="1.10.85" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_CurrentLevel" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.CurrentLevel">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="亮度控制-亮度值，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="CurrentLevel" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="亮度值" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="LevelControl" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="亮度控制" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="数值" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Float" x="Mgr=s:libCnf"/>
+        <p n="minValue" t="a:String" v="1" x="Mgr=s:libCnf"/>
+        <p n="maxValue" t="a:String" v="100" x="Mgr=s:libCnf"/>
+        <p n="stepValue" t="a:String" v="1" x="Mgr=s:libCnf"/>
+        <p n="unit" t="a:String" v="%" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="不在manager服务处理，仅在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="sourcePath" t="a:String" v="1.1.85" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_Toggle" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.Toggle">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="开关功能-开/关，来源于 Aqara Spec 命令定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="Toggle" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="开/关" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="command" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="command" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="Output" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="开关功能" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="1@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="false" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="未知数据类型" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="不在manager服务处理，仅在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="sourcePath" t="a:String" v="4.1.85" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_OnOff" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.OnOff">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="开关功能-开关状态，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="OnOff" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="开关状态" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="Output" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="开关功能" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="布尔" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Bool" x="Mgr=s:libCnf"/>
+        <p n="enumSpec" t="a:String" v="[{&quot;key&quot;:&quot;Off&quot;,&quot;value&quot;:&quot;0&quot;},{&quot;key&quot;:&quot;On&quot;,&quot;value&quot;:&quot;1&quot;}]" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Mandatory" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="不在manager服务处理，仅在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="sourcePath" t="a:String" v="4.1.85" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T1" x="Mgr=s:libCnf"/>
+    </p>
+
+    <p n="app.group.color_2_StartUpOnOff" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.function.app.group.color.StartUpOnOff">
+        <p n="semanticType" t="a:String" f="r" v="DeviceFunction" x="Mgr=s:libMkr"/>
+        <p n="description" t="a:String" v="开关功能-上电开关，来源于 Aqara Spec trait 定义。" x="Mgr=s:libCnf"/>
+        <p n="identifier" t="a:String" v="StartUpOnOff" x="Mgr=s:libCnf"/>
+        <p n="displayName" t="a:String" v="上电开关" x="Mgr=s:libCnf"/>
+        <p n="traitOrCommand" t="a:String" v="trait" x="Mgr=s:libCnf"/>
+        <p n="functionType" t="a:DynamicEnum" v="0@{property=0,telemetry=1,command=2,event=3}" x="Mgr=s:libCnf"/>
+        <p n="functionTypeName" t="a:String" v="property" x="Mgr=s:libCnf"/>
+        <p n="functionCode" t="a:String" v="Output" x="Mgr=s:libCnf"/>
+        <p n="functionName" t="a:String" v="开关功能" x="Mgr=s:libCnf"/>
+        <p n="endpointId" t="a:SignalInteger" v="2" x="Mgr=s:libCnf"/>
+        <p n="endpointName" t="a:String" v="彩灯组" x="Mgr=s:libCnf"/>
+        <p n="deviceTypes" t="a:String" v="Light" x="Mgr=s:libCnf"/>
+        <p n="protocol" t="a:DynamicEnum" v="6@{zigbee=0,ble=1,wifi=2,matter=3,modbus=4,bacnet=5,other=6}" x="Mgr=s:libCnf"/>
+        <p n="accessMode" t="a:DynamicEnum" v="2@{read=0,write=1,read_write=2,notify=3}" x="Mgr=s:libCnf"/>
+        <p n="accessModeName" t="a:String" v="read_write" x="Mgr=s:libCnf"/>
+        <p n="reportable" t="a:Boolean" v="true" x="Mgr=s:libCnf"/>
+        <p n="valueKind" t="a:String" v="枚举" x="Mgr=s:libCnf"/>
+        <p n="dataType" t="a:String" v="Uint8" x="Mgr=s:libCnf"/>
+        <p n="required" t="a:String" v="Optional" x="Mgr=s:libCnf"/>
+        <p n="operationScope" t="a:String" v="不在manager服务处理，仅在device服务处理" x="Mgr=s:libCnf"/>
+        <p n="specClass" t="a:String" v="T2" x="Mgr=s:libCnf"/>
+    </p>
+
+</deviceModelTemplate>

@@ -1,0 +1,561 @@
+{
+  "meta": {
+    "schema": "BxmlIntentExtractionV1",
+    "version": "0.1.0-draft",
+    "locale": "zh-CN",
+    "generatedAt": "2026-03-27",
+    "purpose": "Intermediate extraction plan for generating BXML from natural-language home requirements."
+  },
+  "sourceInput": {
+    "type": "user-natural-language",
+    "text": "帮我构建一个三房一厅，2卫，一个大阳台，每个房间都有单独的灯光空调控制，且安装人体和门窗等传感设备",
+    "normalizedSummary": [
+      "住宅包含三间卧室、一间客厅、两间卫生间和一个大阳台",
+      "主要房间需要独立灯光控制",
+      "主要房间需要独立空调控制",
+      "需要人体传感器",
+      "需要门窗传感设备"
+    ]
+  },
+  "spaceSkeleton": {
+    "space": {
+      "id": "home.demo01",
+      "objectTypeRef": "Space",
+      "displayName": "三房一厅住宅",
+      "semanticType": "Space",
+      "inferenceSource": "三房一厅，2卫，一个大阳台"
+    },
+    "floors": [
+      {
+        "id": "home.demo01.floor1",
+        "objectTypeRef": "Floor",
+        "displayName": "一层",
+        "semanticType": "Floor",
+        "parentRef": "home.demo01",
+        "inferenceSource": "默认单层住宅推断"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "room.master_bedroom",
+        "objectTypeRef": "Room",
+        "displayName": "主卧",
+        "semanticType": "Room",
+        "parentRef": "home.demo01.floor1",
+        "inferenceSource": "三房一厅"
+      },
+      {
+        "id": "room.bedroom_2",
+        "objectTypeRef": "Room",
+        "displayName": "次卧一",
+        "semanticType": "Room",
+        "parentRef": "home.demo01.floor1",
+        "inferenceSource": "三房一厅"
+      },
+      {
+        "id": "room.bedroom_3",
+        "objectTypeRef": "Room",
+        "displayName": "次卧二",
+        "semanticType": "Room",
+        "parentRef": "home.demo01.floor1",
+        "inferenceSource": "三房一厅"
+      },
+      {
+        "id": "room.living_room",
+        "objectTypeRef": "Room",
+        "displayName": "客厅",
+        "semanticType": "Room",
+        "parentRef": "home.demo01.floor1",
+        "inferenceSource": "三房一厅"
+      },
+      {
+        "id": "room.bathroom_1",
+        "objectTypeRef": "Room",
+        "displayName": "卫生间一",
+        "semanticType": "Room",
+        "parentRef": "home.demo01.floor1",
+        "inferenceSource": "2卫"
+      },
+      {
+        "id": "room.bathroom_2",
+        "objectTypeRef": "Room",
+        "displayName": "卫生间二",
+        "semanticType": "Room",
+        "parentRef": "home.demo01.floor1",
+        "inferenceSource": "2卫"
+      }
+    ],
+    "zones": [
+      {
+        "id": "zone.main_balcony",
+        "objectTypeRef": "Zone",
+        "displayName": "大阳台",
+        "semanticType": "Zone",
+        "parentRef": "home.demo01.floor1",
+        "inferenceSource": "一个大阳台"
+      }
+    ]
+  },
+  "structureSkeleton": {
+    "items": [
+      {
+        "id": "structure.main_entrance_door",
+        "objectTypeRef": "Door",
+        "displayName": "入户门",
+        "parentRef": "home.demo01.floor1",
+        "inferenceReason": "住宅默认主入口"
+      },
+      {
+        "id": "structure.master_bedroom_window",
+        "objectTypeRef": "Window",
+        "displayName": "主卧窗",
+        "parentRef": "room.master_bedroom",
+        "inferenceReason": "主要居住空间默认至少一个对外窗"
+      },
+      {
+        "id": "structure.bedroom_2_window",
+        "objectTypeRef": "Window",
+        "displayName": "次卧一窗",
+        "parentRef": "room.bedroom_2",
+        "inferenceReason": "主要居住空间默认至少一个对外窗"
+      },
+      {
+        "id": "structure.bedroom_3_window",
+        "objectTypeRef": "Window",
+        "displayName": "次卧二窗",
+        "parentRef": "room.bedroom_3",
+        "inferenceReason": "主要居住空间默认至少一个对外窗"
+      },
+      {
+        "id": "structure.living_room_window",
+        "objectTypeRef": "Window",
+        "displayName": "客厅窗",
+        "parentRef": "room.living_room",
+        "inferenceReason": "客厅默认至少一个对外窗"
+      },
+      {
+        "id": "structure.balcony_sliding_door",
+        "objectTypeRef": "Door",
+        "displayName": "阳台推拉门",
+        "parentRef": "room.living_room",
+        "inferenceReason": "客厅与阳台之间默认存在通道门"
+      }
+    ]
+  },
+  "deviceRequirements": [
+    {
+      "requirementId": "req.light.per_room",
+      "requirementType": "per_space",
+      "scopeSelector": {
+        "includeRefs": [
+          "room.master_bedroom",
+          "room.bedroom_2",
+          "room.bedroom_3",
+          "room.living_room",
+          "room.bathroom_1",
+          "room.bathroom_2",
+          "zone.main_balcony"
+        ]
+      },
+      "templateRef": "Light",
+      "countRule": "1_per_space",
+      "priority": "high",
+      "inferenceReason": "每个房间都有单独的灯光控制，且阳台和卫生间默认需要照明"
+    },
+    {
+      "requirementId": "req.ac.main_rooms",
+      "requirementType": "per_space",
+      "scopeSelector": {
+        "includeRefs": [
+          "room.master_bedroom",
+          "room.bedroom_2",
+          "room.bedroom_3",
+          "room.living_room"
+        ]
+      },
+      "templateRef": "AirConditioner",
+      "countRule": "1_per_space",
+      "priority": "high",
+      "inferenceReason": "每个房间都有单独空调控制，默认覆盖卧室和客厅"
+    },
+    {
+      "requirementId": "req.motion.per_space",
+      "requirementType": "per_space",
+      "scopeSelector": {
+        "includeRefs": [
+          "room.master_bedroom",
+          "room.bedroom_2",
+          "room.bedroom_3",
+          "room.living_room",
+          "room.bathroom_1",
+          "room.bathroom_2",
+          "zone.main_balcony"
+        ]
+      },
+      "templateRef": "MotionSensor",
+      "countRule": "1_per_space",
+      "priority": "high",
+      "inferenceReason": "安装人体传感设备"
+    },
+    {
+      "requirementId": "req.contact.openings",
+      "requirementType": "per_structure",
+      "scopeSelector": {
+        "includeRefs": [
+          "structure.main_entrance_door",
+          "structure.master_bedroom_window",
+          "structure.bedroom_2_window",
+          "structure.bedroom_3_window",
+          "structure.living_room_window",
+          "structure.balcony_sliding_door"
+        ]
+      },
+      "templateRef": "ContactSensor",
+      "countRule": "1_per_structure",
+      "priority": "high",
+      "inferenceReason": "安装门窗等传感设备"
+    }
+  ],
+  "deviceInstantiationPlan": [
+    {
+      "deviceId": "dev.master_bedroom.light",
+      "templateRef": "Light",
+      "displayName": "主卧主灯",
+      "spaceRef": "room.master_bedroom",
+      "placementRelation": "isInstalledIn",
+      "endpointStrategy": "single_endpoint_multi_function",
+      "functionSelection": [
+        "Output",
+        "LevelControl"
+      ],
+      "corePointSelection": [
+        "OnOff",
+        "On",
+        "Off",
+        "CurrentLevel"
+      ],
+      "inferenceReason": "房间级独立灯光控制"
+    },
+    {
+      "deviceId": "dev.bedroom_2.light",
+      "templateRef": "Light",
+      "displayName": "次卧一主灯",
+      "spaceRef": "room.bedroom_2",
+      "placementRelation": "isInstalledIn",
+      "endpointStrategy": "single_endpoint_multi_function",
+      "functionSelection": [
+        "Output",
+        "LevelControl"
+      ],
+      "corePointSelection": [
+        "OnOff",
+        "On",
+        "Off",
+        "CurrentLevel"
+      ],
+      "inferenceReason": "房间级独立灯光控制"
+    },
+    {
+      "deviceId": "dev.bedroom_3.light",
+      "templateRef": "Light",
+      "displayName": "次卧二主灯",
+      "spaceRef": "room.bedroom_3",
+      "placementRelation": "isInstalledIn",
+      "endpointStrategy": "single_endpoint_multi_function",
+      "functionSelection": [
+        "Output",
+        "LevelControl"
+      ],
+      "corePointSelection": [
+        "OnOff",
+        "On",
+        "Off",
+        "CurrentLevel"
+      ],
+      "inferenceReason": "房间级独立灯光控制"
+    },
+    {
+      "deviceId": "dev.living_room.light",
+      "templateRef": "Light",
+      "displayName": "客厅主灯",
+      "spaceRef": "room.living_room",
+      "placementRelation": "isInstalledIn",
+      "endpointStrategy": "single_endpoint_multi_function",
+      "functionSelection": [
+        "Output",
+        "LevelControl"
+      ],
+      "corePointSelection": [
+        "OnOff",
+        "On",
+        "Off",
+        "CurrentLevel"
+      ],
+      "inferenceReason": "房间级独立灯光控制"
+    },
+    {
+      "deviceId": "dev.bathroom_1.light",
+      "templateRef": "Light",
+      "displayName": "卫生间一灯",
+      "spaceRef": "room.bathroom_1",
+      "placementRelation": "isInstalledIn",
+      "endpointStrategy": "single_endpoint_single_function",
+      "functionSelection": [
+        "Output"
+      ],
+      "corePointSelection": [
+        "OnOff",
+        "On",
+        "Off"
+      ],
+      "inferenceReason": "卫生间默认需要照明"
+    },
+    {
+      "deviceId": "dev.bathroom_2.light",
+      "templateRef": "Light",
+      "displayName": "卫生间二灯",
+      "spaceRef": "room.bathroom_2",
+      "placementRelation": "isInstalledIn",
+      "endpointStrategy": "single_endpoint_single_function",
+      "functionSelection": [
+        "Output"
+      ],
+      "corePointSelection": [
+        "OnOff",
+        "On",
+        "Off"
+      ],
+      "inferenceReason": "卫生间默认需要照明"
+    },
+    {
+      "deviceId": "dev.main_balcony.light",
+      "templateRef": "Light",
+      "displayName": "阳台灯",
+      "spaceRef": "zone.main_balcony",
+      "placementRelation": "isInstalledIn",
+      "endpointStrategy": "single_endpoint_single_function",
+      "functionSelection": [
+        "Output"
+      ],
+      "corePointSelection": [
+        "OnOff",
+        "On",
+        "Off"
+      ],
+      "inferenceReason": "阳台默认需要照明"
+    },
+    {
+      "deviceId": "dev.master_bedroom.ac",
+      "templateRef": "AirConditioner",
+      "displayName": "主卧空调",
+      "spaceRef": "room.master_bedroom",
+      "placementRelation": "isInstalledIn",
+      "endpointStrategy": "single_endpoint_multi_function",
+      "functionSelection": [
+        "Output",
+        "HeaterCooler",
+        "FanControl"
+      ],
+      "corePointSelection": [
+        "OnOff",
+        "HeaterCoolerMode",
+        "CoolingTemperature",
+        "HeatingTemperature",
+        "CurrentTemperature",
+        "FanMode"
+      ],
+      "inferenceReason": "房间级独立空调控制"
+    },
+    {
+      "deviceId": "dev.bedroom_2.ac",
+      "templateRef": "AirConditioner",
+      "displayName": "次卧一空调",
+      "spaceRef": "room.bedroom_2",
+      "placementRelation": "isInstalledIn",
+      "endpointStrategy": "single_endpoint_multi_function",
+      "functionSelection": [
+        "Output",
+        "HeaterCooler",
+        "FanControl"
+      ],
+      "corePointSelection": [
+        "OnOff",
+        "HeaterCoolerMode",
+        "CoolingTemperature",
+        "HeatingTemperature",
+        "CurrentTemperature",
+        "FanMode"
+      ],
+      "inferenceReason": "房间级独立空调控制"
+    },
+    {
+      "deviceId": "dev.bedroom_3.ac",
+      "templateRef": "AirConditioner",
+      "displayName": "次卧二空调",
+      "spaceRef": "room.bedroom_3",
+      "placementRelation": "isInstalledIn",
+      "endpointStrategy": "single_endpoint_multi_function",
+      "functionSelection": [
+        "Output",
+        "HeaterCooler",
+        "FanControl"
+      ],
+      "corePointSelection": [
+        "OnOff",
+        "HeaterCoolerMode",
+        "CoolingTemperature",
+        "HeatingTemperature",
+        "CurrentTemperature",
+        "FanMode"
+      ],
+      "inferenceReason": "房间级独立空调控制"
+    },
+    {
+      "deviceId": "dev.living_room.ac",
+      "templateRef": "AirConditioner",
+      "displayName": "客厅空调",
+      "spaceRef": "room.living_room",
+      "placementRelation": "isInstalledIn",
+      "endpointStrategy": "single_endpoint_multi_function",
+      "functionSelection": [
+        "Output",
+        "HeaterCooler",
+        "FanControl"
+      ],
+      "corePointSelection": [
+        "OnOff",
+        "HeaterCoolerMode",
+        "CoolingTemperature",
+        "HeatingTemperature",
+        "CurrentTemperature",
+        "FanMode"
+      ],
+      "inferenceReason": "房间级独立空调控制"
+    },
+    {
+      "deviceIdPrefix": "dev.motion",
+      "templateRef": "MotionSensor",
+      "scopeRefs": [
+        "room.master_bedroom",
+        "room.bedroom_2",
+        "room.bedroom_3",
+        "room.living_room",
+        "room.bathroom_1",
+        "room.bathroom_2",
+        "zone.main_balcony"
+      ],
+      "placementRelation": "isInstalledIn",
+      "endpointStrategy": "single_endpoint_single_function",
+      "functionSelection": [
+        "OccupancySensing"
+      ],
+      "corePointSelection": [
+        "Occupancy",
+        "OccupancySensorType"
+      ],
+      "inferenceReason": "各空间默认至少一个人体传感器"
+    },
+    {
+      "deviceIdPrefix": "dev.contact",
+      "templateRef": "ContactSensor",
+      "structureRefs": [
+        "structure.main_entrance_door",
+        "structure.master_bedroom_window",
+        "structure.bedroom_2_window",
+        "structure.bedroom_3_window",
+        "structure.living_room_window",
+        "structure.balcony_sliding_door"
+      ],
+      "placementRelation": "isInstalledOn",
+      "endpointStrategy": "single_endpoint_single_function",
+      "functionSelection": [
+        "Contact"
+      ],
+      "corePointSelection": [
+        "ContactSensorState"
+      ],
+      "inferenceReason": "门窗最小覆盖集"
+    }
+  ],
+  "relationsPlan": [
+    {
+      "relationId": "rel.floor.belongs_to.home",
+      "relationType": "belongsTo",
+      "sourceRef": "home.demo01.floor1",
+      "targetRef": "home.demo01",
+      "reason": "空间层级"
+    },
+    {
+      "relationId": "rel.master.belongs_to.floor1",
+      "relationType": "belongsTo",
+      "sourceRef": "room.master_bedroom",
+      "targetRef": "home.demo01.floor1",
+      "reason": "空间层级"
+    },
+    {
+      "relationId": "rel.devices.installed_in_or_on",
+      "relationType": "derived_batch",
+      "sourceRef": "deviceInstantiationPlan",
+      "targetRef": "spaceSkeleton/structureSkeleton",
+      "reason": "由 deviceInstantiationPlan 中的 placementRelation 自动展开"
+    }
+  ],
+  "validationChecks": [
+    {
+      "checkId": "check.room_count",
+      "checkType": "space_coverage",
+      "status": "pass",
+      "message": "空间骨架已覆盖三房一厅、两卫、一个阳台。"
+    },
+    {
+      "checkId": "check.light_coverage",
+      "checkType": "device_coverage",
+      "status": "pass",
+      "message": "灯光实例规则已覆盖全部房间及阳台。"
+    },
+    {
+      "checkId": "check.ac_coverage",
+      "checkType": "device_coverage",
+      "status": "pass",
+      "message": "空调实例规则已覆盖主卧、次卧一、次卧二、客厅。"
+    },
+    {
+      "checkId": "check.motion_coverage",
+      "checkType": "device_coverage",
+      "status": "pass",
+      "message": "人体传感规则已覆盖全部主要空间。"
+    },
+    {
+      "checkId": "check.contact_openings",
+      "checkType": "structure_coverage",
+      "status": "warning",
+      "message": "当前仅生成最小门窗覆盖集，真实窗户数量需后续确认。"
+    }
+  ],
+  "pendingConfirmations": [
+    {
+      "itemId": "confirm.bathroom_ac",
+      "topic": "bathroom-air-conditioner",
+      "question": "两间卫生间是否也需要独立空调或暖风设备？",
+      "impact": "影响最终空调实例数量和模板选择。"
+    },
+    {
+      "itemId": "confirm.window_count",
+      "topic": "window-count",
+      "question": "每个房间的实际窗户数量分别是多少？",
+      "impact": "影响门窗传感器实例数量。"
+    },
+    {
+      "itemId": "confirm.product_models",
+      "topic": "device-model-codes",
+      "question": "灯、空调、人体传感器、门窗传感器的具体产品型号是什么？",
+      "impact": "影响交付级 BXML 中的 modelCode 和运行映射。"
+    },
+    {
+      "itemId": "confirm.install_detail",
+      "topic": "installation-detail",
+      "question": "空调是否需要进一步绑定到墙体、窗边或床侧等具体安装位？",
+      "impact": "影响结构关系和 UI 呈现精度。"
+    }
+  ]
+}

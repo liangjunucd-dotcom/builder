@@ -1,0 +1,263 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<sysObjectGraph version="1.0" >
+    <p t="a:UnrestrictedFolder">
+
+        <!-- 空间语义模型：定义园区/楼层/房间/功能区等空间层级。 -->
+        <p n="Space" t="a:UnrestrictedFolder" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.space">
+            <p n="Space" t="tag:SemanticSpace" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.space">
+                <p n="semanticType" t="a:String" f="r" v="Space" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Generic space ontology." x="Mgr=s:libCnf"/>
+                <p n="enable" t="a:Boolean" v="true" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.enable"/>
+                <p n="area" t="a:Float" v="100.0" x="Mgr=s:libCnf|units=u:square meter;m&#xb2;;(m2);;|displayNameI18n=s:tag:semantic.area"/>
+            </p>
+
+            <p n="Floor" t="tag:SemanticSpace" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.floor">
+                <p n="semanticType" t="a:String" f="r" v="Floor" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Floor space." x="Mgr=s:libCnf"/>
+                <p n="enable" t="a:Boolean" v="true" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.enable"/>
+                <p n="seq" t="a:SignalInteger" v="1" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.seq"/>
+                <p n="area" t="a:Float" v="10.0" x="Mgr=s:libCnf|units=u:square meter;m&#xb2;;(m2);;|displayNameI18n=s:tag:semantic.area"/>
+            </p>
+
+            <p n="Room" t="tag:SemanticSpace" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.room">
+                <p n="semanticType" t="a:String" f="r" v="Room" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Room space." x="Mgr=s:libCnf"/>
+                <p n="enable" t="a:Boolean" v="true" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.enable"/>
+                <p n="area" t="a:Float" v="10.0" x="Mgr=s:libCnf|units=u:square meter;m&#xb2;;(m2);;|displayNameI18n=s:tag:semantic.area"/>
+                <p n="orientation" t="a:DynamicEnum" v="0@{south=0,north=1,east=2,west=3,southeast=4,northeast=5,southwest=6,northwest=7}?stringI18n=s:tag:semantic.orientation" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.orientation"/>
+                <p n="enclosureType" t="a:DynamicEnum" v="0@{closed=0,semi_closed=1,open=2}?stringI18n=s:tag:semantic.enclosureType" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.enclosureType"/>
+            </p>
+
+            <p n="Zone" t="tag:SemanticSpace" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.zone">
+                <p n="semanticType" t="a:String" f="r" v="Zone" x="Mgr=s:libMkr"/>
+                <p n="enable" t="a:Boolean" v="true" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.enable"/>
+                <p n="area" t="a:Float" v="10.0" x="Mgr=s:libCnf|units=u:square meter;m&#xb2;;(m2);;|displayNameI18n=s:tag:semantic.area"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Functional zone within a room." x="Mgr=s:libCnf"/>
+                <p n="type" t="a:DynamicEnum" v="0@{sleep=0,leisure=1,cooking=2,dining=3,wash=4,storage=5,passage=6,office=7}?stringI18n=s:tag:semantic.functionType" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.zone.functionType"/>
+            </p>
+        </p>
+
+        <!-- 设施语义模型：用于定义床、沙发、桌椅、柜体、机柜、配电箱等设备设施。 -->
+        <p n="Facility" t="a:UnrestrictedFolder" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.ontology.facility">
+            <p n="Facility" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.iot.ontology.facility">
+                <p n="semanticType" t="a:String" f="r" v="Facility" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Generic facility entity." x="Mgr=s:libCnf"/>
+                <p n="length" t="a:UnSignalInteger" v="120" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.length"/>
+                <p n="width" t="a:UnSignalInteger" v="60" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.width"/>
+                <p n="height" t="a:UnSignalInteger" v="75" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.height"/>
+            </p>
+
+            <p n="Furniture" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.furniture">
+                <p n="semanticType" t="a:String" f="r" v="Furniture" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Generic furniture entity." x="Mgr=s:libCnf"/>
+                <p n="length" t="a:UnSignalInteger" v="120" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.length"/>
+                <p n="width" t="a:UnSignalInteger" v="60" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.width"/>
+                <p n="height" t="a:UnSignalInteger" v="75" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.height"/>
+            </p>
+
+            <p n="Bed" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.bed">
+                <p n="semanticType" t="a:String" f="r" v="Bed" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Bed furniture." x="Mgr=s:libCnf"/>
+                <p n="length" t="a:UnSignalInteger" v="200" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.length"/>
+                <p n="width" t="a:UnSignalInteger" v="180" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.width"/>
+                <p n="height" t="a:UnSignalInteger" v="45" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.height"/>
+                <p n="type" t="a:DynamicEnum" v="0@{single=0,double=1,bunk=2,tatami=3}?stringI18n=s:tag:semantic.bed.type" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.type"/>
+            </p>
+
+            <p n="SoFa" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.sofa">
+                <p n="semanticType" t="a:String" f="r" v="SoFa" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Sofa furniture." x="Mgr=s:libCnf"/>
+                <p n="length" t="a:UnSignalInteger" v="280" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.length"/>
+                <p n="width" t="a:UnSignalInteger" v="95" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.width"/>
+                <p n="height" t="a:UnSignalInteger" v="88" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.height"/>
+                <p n="type" t="a:DynamicEnum" v="0@{corner=0,l_shape=1,straight=2}?stringI18n=s:tag:semantic.SoFa.type" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.type"/>
+                <p n="seatCount" t="a:SignalInteger" v="4" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.seatCount"/>
+            </p>
+
+            <p n="Chair" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.chair">
+                <p n="semanticType" t="a:String" f="r" v="Chair" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Chair furniture." x="Mgr=s:libCnf"/>
+                <p n="length" t="a:UnSignalInteger" v="45" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.length"/>
+                <p n="width" t="a:UnSignalInteger" v="45" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.width"/>
+                <p n="height" t="a:UnSignalInteger" v="90" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.height"/>
+                <p n="type" t="a:DynamicEnum" v="0@{dining=0,office=1,recliner=2}?stringI18n=s:tag:semantic.chair.type" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.type"/>
+            </p>
+
+            <p n="Table" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.table">
+                <p n="semanticType" t="a:String" f="r" v="Table" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Table furniture." x="Mgr=s:libCnf"/>
+                <p n="length" t="a:UnSignalInteger" v="140" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.length"/>
+                <p n="width" t="a:UnSignalInteger" v="80" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.width"/>
+                <p n="height" t="a:UnSignalInteger" v="75" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.height"/>
+                <p n="type" t="a:DynamicEnum" v="0@{desk=0,dining=1,coffee=2,side=3,bar=4,dressing=5,office=6,workbench=7}?stringI18n=s:tag:semantic.table.type" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.type"/>
+            </p>
+
+            <p n="Cabinet" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.cabinet">
+                <p n="semanticType" t="a:String" f="r" v="Cabinet" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Cabinet furniture." x="Mgr=s:libCnf"/>
+                <p n="length" t="a:UnSignalInteger" v="120" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.length"/>
+                <p n="width" t="a:UnSignalInteger" v="55" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.width"/>
+                <p n="height" t="a:UnSignalInteger" v="220" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.height"/>
+                <p n="type" t="a:DynamicEnum" v="0@{wardrobe=0,kitchen=1,shoe=2,rack=3}?stringI18n=s:tag:semantic.cabinet.type" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.type"/>
+            </p>
+        </p>
+
+        <!-- 建筑构件语义模型：定义墙、门、窗、地板、吊顶等固定结构。 -->
+        <p n="Structure" t="a:UnrestrictedFolder" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.component">
+
+            <p n="Component" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.component">
+                <p n="semanticType" t="a:String" f="r" v="Component" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Generic building element." x="Mgr=s:libCnf"/>
+                <p n="material" t="a:DynamicEnum" v="0@{wood=0,glass=1,metal=2,concrete=3,gypsum_board=4}?stringI18n=s:tag:semantic.material" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.material"/>
+                <p n="length" t="a:UnSignalInteger" v="3000" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.length"/>
+                <p n="width" t="a:UnSignalInteger" v="200" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.width"/>
+                <p n="height" t="a:UnSignalInteger" v="2800" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.height"/>
+                <p n="isLoadBearing" t="a:Boolean" v="true" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.isLoadBearing"/>
+            </p>
+
+            <p n="Wall" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.wall">
+                <p n="semanticType" t="a:String" f="r" v="Wall" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Wall element." x="Mgr=s:libCnf"/>
+                <p n="material" t="a:DynamicEnum" v="0@{wood=0,glass=1,metal=2,concrete=3,gypsum_board=4}?stringI18n=s:tag:semantic.material" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.material"/>
+                <p n="length" t="a:UnSignalInteger" v="3000" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.length"/>
+                <p n="width" t="a:UnSignalInteger" v="200" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.width"/>
+                <p n="height" t="a:UnSignalInteger" v="2800" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.height"/>
+                <p n="wallSide" t="a:DynamicEnum" v="0@{east_wall=0,south_wall=1,west_wall=2,north_wall=3}?stringI18n=s:tag:semantic.side" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.side"/>
+                <p n="isLoadBearing" t="a:Boolean" v="true" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.isLoadBearing"/>
+            </p>
+
+            <p n="Door" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.door">
+                <p n="semanticType" t="a:String" f="r" v="Door" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Door element." x="Mgr=s:libCnf"/>
+                <p n="material" t="a:DynamicEnum" v="0@{wood=0,glass=1,metal=2,concrete=3,gypsum_board=4}?stringI18n=s:tag:semantic.material" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.material"/>
+                <p n="length" t="a:UnSignalInteger" v="950" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.length"/>
+                <p n="width" t="a:UnSignalInteger" v="80" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.width"/>
+                <p n="height" t="a:UnSignalInteger" v="2100" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.height"/>
+                <p n="type" t="a:DynamicEnum" v="0@{hinged=0,sliding=1,double=2}?stringI18n=s:tag:semantic.door.type" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.type"/>
+                <p n="isMainEntrance" t="a:Boolean" v="true" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.isMainEntrance"/>
+            </p>
+
+            <p n="Window" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.window">
+                <p n="semanticType" t="a:String" f="r" v="Window" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Window element." x="Mgr=s:libCnf"/>
+                <p n="material" t="a:DynamicEnum" v="0@{wood=0,glass=1,metal=2,concrete=3,gypsum_board=4}?stringI18n=s:tag:semantic.material" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.material"/>
+                <p n="length" t="a:UnSignalInteger" v="1800" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.length"/>
+                <p n="width" t="a:UnSignalInteger" v="120" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.width"/>
+                <p n="height" t="a:UnSignalInteger" v="1500" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.height"/>
+                <p n="type" t="a:DynamicEnum" v="0@{casement=0,sliding=1,floor_to_ceiling=2,skylight=3}?stringI18n=s:tag:semantic.windowType" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.windowType"/>
+                <p n="isOpenable" t="a:Boolean" v="true" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.isOpenable"/>
+                <p n="daylightWeight" t="a:DynamicEnum" v="4@{1=1,2=2,3=3,4=4,5=5}?stringI18n=s:tag:semantic.daylightWeight" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.daylightWeight"/>
+            </p>
+
+            <p n="Floor" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.floor1">
+                <p n="semanticType" t="a:String" f="r" v="BuildingFloor" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Floor surface element." x="Mgr=s:libCnf"/>
+                <p n="material" t="a:DynamicEnum" v="0@{wood=0,glass=1,metal=2,concrete=3,gypsum_board=4}?stringI18n=s:tag:semantic.material" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.material"/>
+                <p n="length" t="a:UnSignalInteger" v="3000" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.length"/>
+                <p n="width" t="a:UnSignalInteger" v="200" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.width"/>
+                <p n="height" t="a:UnSignalInteger" v="20" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.height"/>
+                <p n="material" t="a:DynamicEnum" v="0@{wood_floor=0,tile=1,carpet=2}?stringI18n=s:tag:semantic.floor.material" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.material"/>
+            </p>
+
+            <p n="Ceiling" t="tag:SemanticAsset" x="Mgr=s:libMkr|displayNameI18n=s:tag:semantic.spatial.ontology.ceiling">
+                <p n="semanticType" t="a:String" f="r" v="Ceiling" x="Mgr=s:libMkr"/>
+                <p n="localPosition" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:meter;m;(m);;|displayNameI18n=s:tag:semantic.localPosition"/>
+                <p n="localEulerAngles" t="a:String" v="0,0,0" x="Mgr=s:libCnf|units=u:degrees angular;&#xb0;;;*0.017453292519943;|displayNameI18n=s:tag:semantic.localEulerAngles"/>
+                <p n="description" t="a:String" v="Ceiling element." x="Mgr=s:libCnf"/>
+                <p n="material" t="a:DynamicEnum" v="0@{wood=0,glass=1,metal=2,concrete=3,gypsum_board=4}?stringI18n=s:tag:semantic.material" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.material"/>
+                <p n="length" t="a:UnSignalInteger" v="3000" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.length"/>
+                <p n="width" t="a:UnSignalInteger" v="200" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.width"/>
+                <p n="height" t="a:UnSignalInteger" v="2800" x="Mgr=s:libCnf|units=u:centimeter;cm;(m);*0.01;|displayNameI18n=s:tag:semantic.height"/>
+                <p n="type" t="a:DynamicEnum" v="0@{none=0,partial=1,full=2}?stringI18n=s:tag:semantic.ceiling.type" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.type"/>
+                <p n="ceilingHeight" t="a:SignalInteger" v="2800" x="Mgr=s:libCnf|displayNameI18n=s:tag:semantic.ceilingHeight"/>
+            </p>
+        </p>
+
+        <!-- 关系定义：定义设备、空间、构件之间的空间关系。 -->
+        <p n="relations" t="a:UnrestrictedFolder" x="Mgr=s:libMkr|displayNameI18nConf=s:">
+            <p n="belongsTo" t="tag:Relation"  x="limitSize=i:1|targetType=s:|sourceType=s:Space,Floor,Room,Zone">
+                <p n="relationId" t="a:String" f="r" v="a:belongsTo" x="Mgr=s:libCnf"/>
+                <p n="sourceOrd" t="a:Ord" v="" x="Mgr=s:libCnf"/>
+
+            </p>
+            <p n="isInstalledIn" t="tag:Relation"  x="limitSize=i:1|targetType=s:Device|sourceType=s:Facility,CableTray,PowerDistributionBox,Furniture,Bed,SoFa,Chair,Table,Cabinet,Component,Wall,Door,Window,BuildingFloor,Ceiling,Device">
+                <p n="relationId" t="a:String" f="r" v="a:isInstalledIn" x="Mgr=s:libCnf"/>
+                <p n="sourceOrd" t="a:Ord" v="" x="Mgr=s:libCnf"/>
+
+            </p>
+            <p n="isInstalledOn" t="tag:Relation"  x="limitSize=i:0|targetType=s:Device|sourceType=s:Facility,CableTray,PowerDistributionBox,Furniture,Bed,SoFa,Chair,Table,Cabinet,Component,Wall,Door,Window,BuildingFloor,Ceiling,Device">
+                <p n="relationId" t="a:String" f="r" v="a:isInstalledOn" x="Mgr=s:libCnf"/>
+                <p n="sourceOrd" t="a:Ord" v="" x="Mgr=s:libCnf"/>
+
+            </p>
+            <p n="serves" t="tag:Relation"  x="limitSize=i:0|targetType=s:Device|sourceType=s:Space,Floor,Room,Zone">
+                <p n="relationId" t="a:String" f="r" v="a:serves" x="Mgr=s:libCnf"/>
+                <p n="sourceOrd" t="a:Ord" v="" x="Mgr=s:libCnf"/>
+
+            </p>
+            <p n="isAdjacentTo" t="tag:Relation"  x="limitSize=i:0|targetType=s:|sourceType=s:">
+                <p n="relationId" t="a:String" f="r" v="a:isAdjacentTo" x="Mgr=s:libCnf"/>
+                <p n="sourceOrd" t="a:Ord" v="" x="Mgr=s:libCnf"/>
+
+            </p>
+            <p n="isOppositeTo" t="tag:Relation"  x="limitSize=i:0|targetType=s:|sourceType=s:">
+                <p n="relationId" t="a:String" f="r" v="a:isOppositeTo" x="Mgr=s:libCnf"/>
+                <p n="sourceOrd" t="a:Ord" v="" x="Mgr=s:libCnf"/>
+
+            </p>
+            <p n="isNear" t="tag:Relation"  x="limitSize=i:0|targetType=s:|sourceType=s:">
+                <p n="relationId" t="a:String" f="r" v="a:isNear" x="Mgr=s:libCnf"/>
+                <p n="sourceOrd" t="a:Ord" v="" x="Mgr=s:libCnf"/>
+
+            </p>
+            <p n="isAbove" t="tag:Relation"  x="limitSize=i:0|targetType=s:|sourceType=s:">
+                <p n="relationId" t="a:String" f="r" v="a:isAbove" x="Mgr=s:libCnf"/>
+                <p n="sourceOrd" t="a:Ord" v="" x="Mgr=s:libCnf"/>
+
+            </p>
+            <p n="connects" t="tag:Relation"  x="limitSize=i:0|targetType=s:Door|sourceType=s:Space,Floor,Room,Zone">
+                <p n="relationId" t="a:String" f="r" v="a:connects" x="Mgr=s:libCnf"/>
+                <p n="sourceOrd" t="a:Ord" v="" x="Mgr=s:libCnf"/>
+
+            </p>
+            <p n="isMeteredUnder" t="tag:Relation"  x="limitSize=i:1|targetType=s:Device|sourceType=s:Device">
+                <p n="relationId" t="a:String" f="r" v="a:isMeteredUnder" x="Mgr=s:libCnf"/>
+                <p n="sourceOrd" t="a:Ord" v="" x="Mgr=s:libCnf"/>
+
+            </p>
+        </p>
+
+    </p>
+</sysObjectGraph>
