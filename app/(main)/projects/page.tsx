@@ -6,7 +6,7 @@ import { useAccount } from "@/context/AccountContext";
 import { useProjects } from "@/context/ProjectsContext";
 import {
   Search, Plus, Check, ChevronDown, MoreHorizontal, Star,
-  ChevronLeft, MapPin, Clock, Users, X,
+  ChevronLeft, MapPin, Clock, Users, X, FolderInput,
 } from "lucide-react";
 import { SPACE_TYPES, getSpaceType } from "@/lib/space-types";
 import type { Project, SpaceTypeId } from "@/lib/domain-types";
@@ -49,7 +49,7 @@ function timeAgo(dateStr?: string): string {
 export default function ProjectsPage() {
   const router = useRouter();
   const { currentSpace, account } = useAccount();
-  const { projects, starredProjectIds, toggleProjectStar, getProjectsByBuilderSpaceId, addProject, getBxml } = useProjects();
+  const { projects, starredProjectIds, toggleProjectStar, getProjectsByBuilderSpaceId, addProject, getBxml, updateProject } = useProjects();
 
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<FilterTab>("All");
@@ -60,6 +60,9 @@ export default function ProjectsPage() {
   const [newSpaceType, setNewSpaceType] = useState<SpaceTypeId>("office");
   const [spaceTypeDropdownOpen, setSpaceTypeDropdownOpen] = useState(false);
   const [newBusinessType, setNewBusinessType] = useState<"delivery" | "customer" | "self_use">("delivery");
+  const [planMenuOpenId, setPlanMenuOpenId] = useState<string | null>(null);
+  const [movingPlan, setMovingPlan] = useState<Project | null>(null);
+  const [moveTargetProjectId, setMoveTargetProjectId] = useState<string>("");
 
   const STARRED = new Set(starredProjectIds);
   const isContainer = (p: Project) => !(p.creationMethod === "ai_build" || p.projectType === "ai_build") && !p.parentProjectId;
@@ -224,11 +227,10 @@ export default function ProjectsPage() {
                   const bxml = getBxml(plan.id);
                   const stats = bxml ? getBXMLStats(bxml) : null;
                   return (
-                    <button
+                    <div
                       key={plan.id}
-                      type="button"
                       onClick={() => router.push(`/projects/${plan.id}?loading=1`)}
-                      className="group rounded-xl border border-zinc-800/50 bg-zinc-900/40 hover:border-zinc-700/60 hover:bg-zinc-900/70 transition-all text-left overflow-hidden"
+                      className="group relative rounded-xl border border-zinc-800/50 bg-zinc-900/40 hover:border-zinc-700/60 hover:bg-zinc-900/70 transition-all text-left overflow-hidden cursor-pointer"
                     >
                       {/* Map placeholder */}
                       <div className="aspect-[4/3] flex items-center justify-center border-b border-zinc-800/40 bg-zinc-900/60">
@@ -237,7 +239,13 @@ export default function ProjectsPage() {
                       <div className="p-3">
                         <div className="flex items-start justify-between gap-2">
                           <p className="text-sm font-medium text-zinc-100 truncate">{plan.name}</p>
-                          <MoreHorizontal className="h-4 w-4 text-zinc-600 shrink-0 opacity-0 group-hover:opacity-100" />
+                          <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); setPlanMenuOpenId((v) => (v === plan.id ? null : plan.id)); }}
+                            className="h-6 w-6 rounded-md flex items-center justify-center text-zinc-600 hover:text-zinc-300 hover:bg-zinc-800/60 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </button>
                         </div>
                         {stats && (stats.spaces > 0 || stats.devices > 0) && (
                           <div className="flex items-center gap-3 mt-1.5 text-[11px] text-zinc-500">
@@ -247,7 +255,26 @@ export default function ProjectsPage() {
                         )}
                         <p className="text-[11px] text-zinc-600 mt-1.5">Updated {timeAgo(plan.updatedAt)}</p>
                       </div>
-                    </button>
+                      {planMenuOpenId === plan.id && (
+                        <>
+                          <div className="fixed inset-0 z-40" onClick={(e) => { e.stopPropagation(); setPlanMenuOpenId(null); }} />
+                          <div className="absolute right-2 top-[58%] z-50 w-44 rounded-xl border border-zinc-700/50 bg-zinc-900 shadow-2xl overflow-hidden">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setPlanMenuOpenId(null);
+                                setMovingPlan(plan);
+                                setMoveTargetProjectId(selectedProject?.id ?? "");
+                              }}
+                              className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-zinc-300 hover:bg-zinc-800/60 transition-colors"
+                            >
+                              <FolderInput className="h-3.5 w-3.5 text-amber-400" /> Move to Projects
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
                   );
                 })}
               </div>
@@ -476,6 +503,56 @@ export default function ProjectsPage() {
                   Create
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {movingPlan && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={() => { setMovingPlan(null); setMoveTargetProjectId(""); }}>
+          <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-950 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
+              <div>
+                <h3 className="text-base font-semibold text-zinc-100">Move to Projects</h3>
+                <p className="mt-1 text-xs text-zinc-500">Move "{movingPlan.name}" to another Project</p>
+              </div>
+              <button type="button" onClick={() => { setMovingPlan(null); setMoveTargetProjectId(""); }} className="rounded-lg p-1.5 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="p-4 space-y-2 max-h-[360px] overflow-auto">
+              {allProjects.filter((p) => p.id !== movingPlan.parentProjectId).map((p) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => setMoveTargetProjectId(p.id)}
+                  className={`w-full flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-all ${moveTargetProjectId === p.id ? "border-indigo-500/50 bg-indigo-500/10" : "border-zinc-800 hover:border-zinc-700 hover:bg-zinc-900/50"}`}
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-zinc-200 truncate">{p.name}</p>
+                  </div>
+                  {moveTargetProjectId === p.id && <Check className="h-4 w-4 text-indigo-400 shrink-0" />}
+                </button>
+              ))}
+            </div>
+            <div className="flex justify-end gap-3 border-t border-zinc-800 px-5 py-4">
+              <button type="button" onClick={() => { setMovingPlan(null); setMoveTargetProjectId(""); }} className="rounded-lg px-4 py-2 text-sm text-zinc-400 hover:text-zinc-200">Cancel</button>
+              <button
+                type="button"
+                disabled={!moveTargetProjectId}
+                onClick={() => {
+                  if (!movingPlan || !moveTargetProjectId) return;
+                  updateProject(movingPlan.id, {
+                    parentProjectId: moveTargetProjectId,
+                    updatedAt: new Date().toISOString(),
+                  });
+                  setMovingPlan(null);
+                  setMoveTargetProjectId("");
+                }}
+                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                Move
+              </button>
             </div>
           </div>
         </div>

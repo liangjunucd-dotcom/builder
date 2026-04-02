@@ -52,6 +52,12 @@ export interface Project {
   coverVideoStatus?: "idle" | "generating" | "ready" | "failed";
   /** Studio bound when entering creation mode (optional) */
   selectedStudioId?: string | null;
+  /** Home data sync status for current selected Studio context */
+  homeDataSyncStatus?: "synced" | "not_synced";
+  /** Synced Aqara Home family name (when synced) */
+  homeDataFamilyName?: string;
+  /** Prompt state for home-data connection in canvas conversation */
+  homeDataPromptState?: "never_asked" | "declined" | "accepted";
   /** When the space package was last deployed / assigned to the linked Studio (ISO) */
   deployedAt?: string;
   /** Names of user-uploaded reference images */

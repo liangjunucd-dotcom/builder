@@ -6,12 +6,14 @@ import { usePathname } from "next/navigation";
 import {
   Bell,
   BookOpen,
+  Check,
   ChevronDown,
   ChevronRight,
   Clock,
   Coins,
   Cpu,
   ExternalLink,
+  Gift,
   Globe,
   Headphones,
   Home,
@@ -20,9 +22,13 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Plus,
+  Rss,
   Search,
+  Settings,
+  ShoppingBag,
   Sparkles,
   Store,
+  UserPlus,
 } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
 import { useBilling } from "@/context/BillingContext";
@@ -77,6 +83,13 @@ const PAGE_META: Array<{ match: (pathname: string) => boolean; meta: PageMeta }>
     meta: {
       title: "Marketplace",
       subtitle: "Discover reusable templates, Life plugins, and install-ready space packages.",
+    },
+  },
+  {
+    match: (pathname) => pathname.startsWith("/moments"),
+    meta: {
+      title: "Moments",
+      subtitle: "Latest feeds, project showcases, ecosystem news, and partner updates.",
     },
   },
   {
@@ -154,6 +167,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     { href: "/projects", label: "Projects", icon: LayoutGrid },
     { href: "/spaces", label: "Studios", icon: Cpu },
     { href: "/marketplace", label: "Marketplace", icon: Store },
+    { href: "/moments", label: "Moments", icon: Rss },
     { href: "/recents", label: "Recents", icon: Clock, exact: true },
   ];
 
@@ -236,97 +250,79 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {workspaceCard}
 
           {isWorkspaceMenuOpen && !collapsed && (
-            <div className="absolute left-3 right-3 top-[calc(100%+6px)] z-40 overflow-hidden rounded-2xl border border-white/10 bg-[#0b111a] shadow-2xl shadow-black/50">
-              <div className="border-b border-white/6 px-4 py-3">
-                <p className="text-[11px] uppercase tracking-[0.18em] text-zinc-500">Active Workspace</p>
-                <p className="mt-2 text-sm font-semibold text-zinc-100">{currentSpace?.name}</p>
-                <p className="mt-1 text-xs text-zinc-500">{getWorkspaceKindDescription(currentSpace)}</p>
-              </div>
-
-              <div className="px-3 py-3">
-                <p className="px-2 text-[10px] uppercase tracking-[0.18em] text-zinc-600">Personal</p>
-                <div className="mt-2 space-y-1">
-                  {groupedSpaces.personal.map((space) => (
-                    <button
-                      key={space.id}
-                      type="button"
-                      onClick={() => {
-                        setCurrentSpaceId(space.id);
-                        setIsWorkspaceMenuOpen(false);
-                      }}
-                      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left transition-colors ${
-                        currentSpace?.id === space.id ? "bg-white/7 text-zinc-100" : "text-zinc-300 hover:bg-white/5"
-                      }`}
+            <>
+              {/* overlay */}
+              <div className="fixed inset-0 z-30" onClick={() => setIsWorkspaceMenuOpen(false)} />
+              <div className="absolute left-0 right-0 top-[calc(100%+6px)] z-40 overflow-hidden rounded-2xl border border-white/10 bg-[#13181f] shadow-2xl shadow-black/60">
+                {/* Header */}
+                <div className="px-4 pt-4 pb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-violet-600 text-lg font-bold text-white shadow-lg">
+                      {currentSpace?.name.charAt(0)}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate text-base font-semibold text-zinc-50">{currentSpace?.name}</p>
+                      <p className="text-xs text-zinc-500">
+                        {currentMembership.displayName} · {currentSpace?.members.length ?? 1} member{(currentSpace?.members.length ?? 1) > 1 ? "s" : ""}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    <Link
+                      href="/settings"
+                      onClick={() => setIsWorkspaceMenuOpen(false)}
+                      className="flex items-center justify-center gap-1.5 rounded-xl border border-white/8 bg-white/5 px-3 py-2 text-xs font-medium text-zinc-300 transition-colors hover:bg-white/8"
                     >
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-900 ring-1 ring-white/8">
-                        <span className="text-xs font-semibold text-white">{space.name.charAt(0)}</span>
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-medium">{space.name}</p>
-                        <p className="text-[11px] text-zinc-500">{getWorkspaceRegionLabel(space)}</p>
-                      </div>
-                      <span className="rounded-full border border-sky-400/20 bg-sky-500/10 px-2 py-0.5 text-[10px] font-medium text-sky-300">
-                        Default
-                      </span>
+                      <Settings className="h-3.5 w-3.5" />
+                      Settings
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => setIsWorkspaceMenuOpen(false)}
+                      className="flex items-center justify-center gap-1.5 rounded-xl border border-white/8 bg-white/5 px-3 py-2 text-xs font-medium text-zinc-300 transition-colors hover:bg-white/8"
+                    >
+                      <UserPlus className="h-3.5 w-3.5" />
+                      Invite
                     </button>
-                  ))}
+                  </div>
                 </div>
-              </div>
 
-              <div className="border-t border-white/6 px-3 py-3">
-                <div className="flex items-center justify-between px-2">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-zinc-600">Collaborative</p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsWorkspaceMenuOpen(false);
-                      setIsCreateWorkspaceModalOpen(true);
-                    }}
-                    className="inline-flex items-center gap-1 rounded-full border border-white/8 bg-white/5 px-2 py-1 text-[10px] font-medium text-zinc-300 transition-colors hover:bg-white/8"
-                  >
-                    <Plus className="h-3 w-3" />
-                    New
-                  </button>
-                </div>
-                <div className="mt-2 space-y-1">
-                  {groupedSpaces.collaborative.length > 0 ? (
-                    groupedSpaces.collaborative.map((space) => (
+                {/* All workspaces */}
+                <div className="border-t border-white/6 px-3 py-2">
+                  <p className="px-2 pb-1.5 text-[11px] text-zinc-500">All workspaces</p>
+                  <div className="space-y-0.5">
+                    {spaces.map((space) => (
                       <button
                         key={space.id}
                         type="button"
-                        onClick={() => {
-                          setCurrentSpaceId(space.id);
-                          setIsWorkspaceMenuOpen(false);
-                        }}
-                        className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left transition-colors ${
-                          currentSpace?.id === space.id ? "bg-white/7 text-zinc-100" : "text-zinc-300 hover:bg-white/5"
-                        }`}
+                        onClick={() => { setCurrentSpaceId(space.id); setIsWorkspaceMenuOpen(false); }}
+                        className="flex w-full items-center gap-3 rounded-xl px-2 py-2.5 text-left transition-colors hover:bg-white/5"
                       >
-                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-900 ring-1 ring-white/8">
-                          <span className="text-xs font-semibold text-white">{space.name.charAt(0)}</span>
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-zinc-800 text-xs font-semibold text-zinc-200">
+                          {space.name.charAt(0)}
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
-                            <p className="truncate text-sm font-medium">{space.name}</p>
-                            {isCollaborativeWorkspace(space) && (
-                              <span className="rounded-full border border-amber-400/20 bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-300">
-                                Shared
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-[11px] text-zinc-500">{space.members.length} members · {getWorkspaceRegionLabel(space)}</p>
-                        </div>
-                        <ChevronRight className="h-4 w-4 shrink-0 text-zinc-600" />
+                        <p className="min-w-0 flex-1 truncate text-sm text-zinc-200">{space.name}</p>
+                        {currentSpace?.id === space.id && (
+                          <Check className="h-4 w-4 shrink-0 text-blue-400" />
+                        )}
                       </button>
-                    ))
-                  ) : (
-                    <div className="rounded-xl border border-dashed border-white/8 px-3 py-4 text-center text-xs text-zinc-600">
-                      Create a collaborative workspace for delivery teams, installers, or customer projects.
-                    </div>
-                  )}
+                    ))}
+                  </div>
+                </div>
+
+                {/* New workspace */}
+                <div className="border-t border-white/6 px-3 py-2 pb-3">
+                  <button
+                    type="button"
+                    onClick={() => { setIsWorkspaceMenuOpen(false); setIsCreateWorkspaceModalOpen(true); }}
+                    className="flex w-full items-center gap-2 rounded-xl px-2 py-2.5 text-sm text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-200"
+                  >
+                    <Plus className="h-4 w-4" />
+                    New workspace
+                  </button>
                 </div>
               </div>
-            </div>
+            </>
           )}
         </div>
 
@@ -359,22 +355,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
           {!collapsed && (
             <>
-              <div className="mt-6 rounded-2xl border border-white/8 bg-gradient-to-br from-sky-500/10 via-cyan-400/6 to-transparent p-4">
-                <p className="text-[10px] uppercase tracking-[0.18em] text-zinc-500">Current Motion</p>
-                <p className="mt-2 text-sm font-semibold text-zinc-100">
-                  {isPersonalWorkspace(currentSpace) ? "Cloud Studio Trial" : "Workspace Delivery"}
-                </p>
-                <p className="mt-1 text-xs leading-relaxed text-zinc-400">
-                  {isPersonalWorkspace(currentSpace)
-                    ? "Design in Builder, activate a personal Cloud Studio trial, then continue in Aqara Life."
-                    : "Use this shared workspace for installer delivery, runtime binding, and member-scoped operations."}
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2 text-[11px] text-zinc-300">
-                  <span className="rounded-full border border-white/8 bg-black/20 px-2 py-1">Workspace</span>
-                  <span className="rounded-full border border-white/8 bg-black/20 px-2 py-1">Studio</span>
-                  <span className="rounded-full border border-white/8 bg-black/20 px-2 py-1">Life</span>
-                </div>
-              </div>
+
 
               <div className="mt-6">
                 <p className="px-1 text-[10px] uppercase tracking-[0.18em] text-zinc-600">Quick Access</p>
@@ -406,73 +387,37 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           )}
         </div>
 
-        <div className="border-t border-white/6 px-3 py-3">
-          {!collapsed ? (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between rounded-2xl border border-white/8 bg-zinc-950/60 px-3 py-2">
-                <div>
-                  <p className="text-xs font-medium text-zinc-200">{account?.name ?? "Builder"}</p>
-                  <p className="text-[11px] text-zinc-500">{currentMembership.displayName}</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setIsUserMenuOpen((value) => !value)}
-                  className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 via-cyan-300 to-amber-300 text-sm font-bold text-slate-950"
-                >
-                  {account?.name?.charAt(0) ?? "A"}
-                </button>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <Link href="/academy" className="flex items-center justify-center gap-2 rounded-xl border border-white/8 bg-white/4 px-3 py-2 text-xs text-zinc-300 transition-colors hover:bg-white/7">
-                  <BookOpen className="h-3.5 w-3.5" />
-                  Guide
-                </Link>
-                <Link href="/collab" className="flex items-center justify-center gap-2 rounded-xl border border-white/8 bg-white/4 px-3 py-2 text-xs text-zinc-300 transition-colors hover:bg-white/7">
-                  <Headphones className="h-3.5 w-3.5" />
-                  Support
-                </Link>
-              </div>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setIsUserMenuOpen((value) => !value)}
-              className="mx-auto flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-400 via-cyan-300 to-amber-300 text-sm font-bold text-slate-950"
-            >
-              {account?.name?.charAt(0) ?? "A"}
-            </button>
-          )}
-
-          {isUserMenuOpen && (
-            <div className={`absolute bottom-4 z-40 w-[252px] overflow-hidden rounded-2xl border border-white/10 bg-[#0b111a] shadow-2xl shadow-black/50 ${collapsed ? "left-[84px]" : "left-3"}`}>
-              <div className="border-b border-white/6 px-4 py-3">
-                <p className="text-sm font-semibold text-zinc-100">{account?.name}</p>
-                <p className="mt-1 text-xs text-zinc-500">{account?.email}</p>
-              </div>
-              <div className="px-3 py-3">
-                <div className="rounded-2xl border border-white/8 bg-white/4 p-3">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-zinc-600">Credits</p>
-                  <p className="mt-2 text-2xl font-semibold text-zinc-50">{personalCredits.toLocaleString()}</p>
-                  <p className="mt-1 text-xs text-zinc-500">Used for AI design, BXML generation, and plugin packaging.</p>
-                </div>
-                <div className="mt-3 space-y-1">
-                  <Link href="/plans" onClick={() => setIsUserMenuOpen(false)} className="flex items-center justify-between rounded-xl px-3 py-2 text-sm text-zinc-300 transition-colors hover:bg-white/5">
-                    Plans & Billing
-                    <ChevronRight className="h-4 w-4 text-zinc-600" />
-                  </Link>
-                  <a
-                    href="https://www.aqara.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between rounded-xl px-3 py-2 text-sm text-zinc-300 transition-colors hover:bg-white/5"
-                  >
-                    Aqara Official
-                    <ExternalLink className="h-4 w-4 text-zinc-600" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          )}
+        <div className="border-t border-white/6 px-3 py-3 space-y-1">
+          {[
+            { href: "/academy", label: "Academy", icon: BookOpen },
+            { href: "/collab", label: "Support", icon: Headphones },
+            { href: "https://www.aqara.com/store", label: "Aqara Shop", icon: ShoppingBag, external: true },
+          ].map((item) => {
+            const Icon = item.icon;
+            return item.external ? (
+              <a
+                key={item.href}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center gap-3 rounded-2xl border border-transparent px-3 py-2.5 text-sm text-zinc-400 transition-all hover:border-white/6 hover:bg-white/4 hover:text-zinc-200 ${collapsed ? "justify-center" : ""}`}
+                title={item.label}
+              >
+                <Icon className="h-4 w-4 shrink-0" />
+                {!collapsed && <span>{item.label}</span>}
+              </a>
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-3 rounded-2xl border border-transparent px-3 py-2.5 text-sm text-zinc-400 transition-all hover:border-white/6 hover:bg-white/4 hover:text-zinc-200 ${collapsed ? "justify-center" : ""}`}
+                title={item.label}
+              >
+                <Icon className="h-4 w-4 shrink-0" />
+                {!collapsed && <span>{item.label}</span>}
+              </Link>
+            );
+          })}
         </div>
       </aside>
 
@@ -498,25 +443,50 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
 
             <div className="flex items-center gap-2">
-              <div className="hidden rounded-2xl border border-white/8 bg-white/4 px-3 py-2 text-right md:block">
-                <p className="text-[10px] uppercase tracking-[0.18em] text-zinc-600">Workspace</p>
-                <p className="mt-1 text-xs font-medium text-zinc-200">{currentSpace?.name ?? "No Workspace"}</p>
-              </div>
-              <Link href="/plans" className="hidden items-center gap-2 rounded-2xl border border-white/8 bg-white/4 px-3 py-2 text-sm text-zinc-300 transition-colors hover:bg-white/7 md:flex">
-                <Coins className="h-4 w-4 text-amber-300" />
+              {/* Invitation Reward */}
+              <button
+                type="button"
+                className="hidden items-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-blue-500/30 transition-opacity hover:opacity-90 md:flex"
+              >
+                <Gift className="h-4 w-4" />
+                Invitation Reward
+              </button>
+
+              {/* Credits */}
+              <Link
+                href="/plans"
+                className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-semibold text-zinc-200 transition-colors hover:bg-white/8"
+              >
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-[10px] font-bold text-white">A</span>
                 {personalCredits.toLocaleString()}
               </Link>
-              <button type="button" className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/8 bg-white/4 text-zinc-400 transition-colors hover:bg-white/7 hover:text-zinc-200">
+
+              {/* Divider */}
+              <div className="mx-1 h-5 w-px bg-white/10" />
+
+              {/* Guide */}
+              <button
+                type="button"
+                className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-zinc-300 transition-colors hover:bg-white/8"
+              >
+                <BookOpen className="h-3.5 w-3.5" />
+                Guide
+              </button>
+
+              {/* Divider */}
+              <div className="mx-1 h-5 w-px bg-white/10" />
+
+              {/* Bell */}
+              <button type="button" className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-zinc-400 transition-colors hover:bg-white/8 hover:text-zinc-200">
                 <Bell className="h-4 w-4" />
               </button>
-              <a
-                href="https://www.aqara.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden h-10 w-10 items-center justify-center rounded-2xl border border-white/8 bg-white/4 text-zinc-400 transition-colors hover:bg-white/7 hover:text-zinc-200 lg:flex"
-              >
-                <Globe className="h-4 w-4" />
-              </a>
+
+              {/* Avatar */}
+              <button type="button" className="h-9 w-9 overflow-hidden rounded-full ring-2 ring-white/10 transition-opacity hover:opacity-80">
+                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-500 to-violet-600 text-sm font-bold text-white">
+                  {account?.name?.charAt(0) ?? "U"}
+                </div>
+              </button>
             </div>
           </div>
         </header>

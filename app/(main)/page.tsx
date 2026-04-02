@@ -28,6 +28,12 @@ import {
   Cpu,
   Mic,
   Send,
+  Plus,
+  RefreshCw,
+  CloudUpload,
+  Home,
+  ArrowRight,
+  Zap,
 } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
 import { useProjects } from "@/context/ProjectsContext";
@@ -46,12 +52,13 @@ const QUICK_PROMPTS = [
 
 const TASK_CARDS = [
   {
-    icon: Sparkles,
-    color: "text-blue-400",
-    bg: "bg-blue-500/10 border-blue-500/20",
-    label: "Aqara AI 新功能",
-    desc: "探索最新 AI 设计能力",
-    prompt: "介绍 Aqara Builder 最新的 AI 功能，以及如何用 AI 快速设计智能空间方案",
+    icon: Home,
+    color: "text-emerald-400",
+    bg: "bg-emerald-500/10 border-emerald-500/20",
+    label: "连接我的家",
+    desc: "同步 Aqara Home 家庭数据到 Studio",
+    prompt: "",
+    action: "connect-home" as const,
   },
   {
     icon: Building2,
@@ -65,9 +72,9 @@ const TASK_CARDS = [
     icon: ImagePlus,
     color: "text-sky-400",
     bg: "bg-sky-500/10 border-sky-500/20",
-    label: "分析户型图",
-    desc: "上传户型图，AI 自动识别空间",
-    prompt: "我上传了一张户型图，请分析各空间的功能区域，并为每个房间推荐智能设备和自动化方案",
+    label: "二次创作",
+    desc: "上传空间方案，AI 自动优化",
+    prompt: "我上传了一份已有的空间方案，请帮我分析其中可以改进的地方，并给出优化建议，包括设备调整、自动化优化和 App 界面改进",
   },
   {
     icon: Cpu,
@@ -92,6 +99,16 @@ const AI_MODELS = [
   { id: "gpt-4o", label: "GPT-4o", badge: "" },
   { id: "claude-3-7", label: "Claude 3.7", badge: "" },
   { id: "gemini-2", label: "Gemini 2.0", badge: "" },
+];
+
+const MOCK_AIOT_FAMILIES = [
+  { id: "fam-001", name: "我的家", location: "上海", devices: 14 },
+  { id: "fam-002", name: "父母家", location: "杭州", devices: 8 },
+];
+
+const MOCK_CLOUD_STUDIOS = [
+  { id: "cs-001", name: "aqarastudio-7831", label: "我的家", status: "online" as const, devices: 14, rooms: 4, lastSync: "2h ago", aiotSynced: true, syncedFamilyName: "我的家" },
+  { id: "cs-002", name: "aqarastudio-5492", label: "父母家", status: "offline" as const, devices: 8, rooms: 3, lastSync: "3d ago", aiotSynced: false, syncedFamilyName: "" },
 ];
 
 const BUILD_VISUALS = [
@@ -119,9 +136,6 @@ function sortByTrending(items: GalleryItem[]): GalleryItem[] {
   });
 }
 
-function generateStudioId(): string {
-  return `aqarastudio-${String(Math.floor(1000 + Math.random() * 9000))}`;
-}
 
 export default function HomePage() {
   const router = useRouter();
@@ -133,16 +147,25 @@ export default function HomePage() {
   const [bottomTab, setBottomTab] = useState<BottomTab>("my-build");
   const [qrProject, setQrProject] = useState<Project | null>(null);
   const [buildProject, setBuildProject] = useState<Project | null>(null);
+  const [qrBuildMeta, setQrBuildMeta] = useState<Record<string, { builtAt: string }>>({});
   const [moveBuildProject, setMoveBuildProject] = useState<Project | null>(null);
   const [targetProjectId, setTargetProjectId] = useState<string>("");
   const [selectedModel, setSelectedModel] = useState("aqara-ai");
   const [modelMenuOpen, setModelMenuOpen] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [uploadedFileName, setUploadedFileName] = useState<string>("");
+  const [attachmentMenuOpen, setAttachmentMenuOpen] = useState(false);
+  const [showStudioPicker, setShowStudioPicker] = useState(false);
+  const [showConnectHome, setShowConnectHome] = useState(false);
+  const [homeDataPromptState, setHomeDataPromptState] = useState<"never_asked" | "declined" | "accepted">("never_asked");
+  const [actionWarning, setActionWarning] = useState<string>("");
+
+  // Studio selector for 二次创作 / 对话上下文
+  const [cloudStudios, setCloudStudios] = useState(MOCK_CLOUD_STUDIOS);
+  const [selectedStudioId, setSelectedStudioId] = useState<string | null>(null);
+  const [deployProject, setDeployProject] = useState<Project | null>(null);
   const promptRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const studioId = useRef(generateStudioId());
 
   const AI_BUILD_COST = 200;
 
@@ -173,7 +196,7 @@ export default function HomePage() {
     }
     setCreditWarning(false);
     const p = text.trim() || "New AI Build";
-    const sid = studioId.current;
+    const selectedStudio = cloudStudios.find(s => s.id === selectedStudioId);
     const project: Project = {
       id: `proj-${Date.now()}`,
       name: p.slice(0, 40),
@@ -187,14 +210,26 @@ export default function HomePage() {
       projectMode: "standard",
       projectType: "ai_build",
       studioLinked: false,
+      selectedStudioId: selectedStudioId ?? null,
+      homeDataSyncStatus: selectedStudio?.aiotSynced ? "synced" : "not_synced",
+      homeDataFamilyName: selectedStudio?.syncedFamilyName ?? "",
+      homeDataPromptState: selectedStudio?.aiotSynced ? "accepted" : homeDataPromptState,
       updatedAt: new Date().toISOString(),
       agentStep: "describe",
     };
     addProject(project);
-    router.push(`/projects/${project.id}?prompt=${encodeURIComponent(p)}&studio=${encodeURIComponent(sid)}&mode=space&loading=1`);
+    const studioParam = selectedStudio ? `&studio=${encodeURIComponent(selectedStudio.name)}` : "";
+    router.push(`/projects/${project.id}?prompt=${encodeURIComponent(p)}${studioParam}&mode=space&loading=1`);
   };
 
   const handleCreate = () => createProjectAndOpen(prompt);
+
+  const selectedStudio = cloudStudios.find((s) => s.id === selectedStudioId) ?? null;
+
+  const handleConnectMyHome = () => {
+    setActionWarning("");
+    setShowConnectHome(true);
+  };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -227,6 +262,32 @@ export default function HomePage() {
 
           {/* Input Card */}
           <div className="rounded-2xl border border-zinc-700/50 bg-zinc-900/60 shadow-xl shadow-black/30 backdrop-blur-sm">
+            {selectedStudio && (
+              <div className="px-4 pt-4">
+                <div className="inline-flex flex-col items-start gap-1">
+                  <div className="relative inline-flex items-center gap-2 rounded-full border border-zinc-700/60 bg-zinc-800/70 px-3 py-1.5 pr-2">
+                    <span className={`h-1.5 w-1.5 rounded-full ${selectedStudio.status === "online" ? "bg-emerald-400" : "bg-zinc-500"}`} />
+                    <span className="max-w-[220px] truncate text-[11px] font-medium text-zinc-200">{selectedStudio.name}</span>
+                    {selectedStudio.aiotSynced && selectedStudio.syncedFamilyName && (
+                      <span className="pointer-events-none absolute -top-2.5 right-7 rounded-full border border-emerald-500/30 bg-emerald-500/20 px-2 py-[1px] text-[10px] font-medium text-emerald-300">
+                        {selectedStudio.syncedFamilyName}
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setSelectedStudioId(null)}
+                      className="rounded-full p-0.5 text-zinc-500 hover:bg-zinc-700/70 hover:text-zinc-300 transition-colors"
+                      title="取消当前 Studio 上下文"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                  <p className={`text-[10px] ${selectedStudio.aiotSynced ? "text-emerald-300/90" : "text-zinc-500"}`}>
+                    {selectedStudio.aiotSynced ? `Home Data Synced${selectedStudio.syncedFamilyName ? ` · ${selectedStudio.syncedFamilyName}` : ""}` : "Home Data Not synced"}
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Uploaded image preview */}
             {uploadedImage && (
@@ -260,7 +321,6 @@ export default function HomePage() {
             {/* Bottom bar */}
             <div className="flex items-center justify-between gap-3 px-4 pb-4">
               <div className="flex items-center gap-2">
-                {/* Upload floor plan */}
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -268,15 +328,45 @@ export default function HomePage() {
                   className="hidden"
                   onChange={handleFileUpload}
                 />
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  title="上传户型图"
-                  className="flex items-center gap-1.5 rounded-lg border border-zinc-700/40 bg-zinc-800/50 px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200 hover:border-zinc-600/60 hover:bg-zinc-800 transition-all"
-                >
-                  <ImagePlus className="h-3.5 w-3.5" />
-                  <span>户型图</span>
-                </button>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setAttachmentMenuOpen((v) => !v)}
+                    title="添加上下文"
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-700/50 bg-zinc-800/70 text-zinc-300 hover:text-zinc-100 hover:border-zinc-600 hover:bg-zinc-800 transition-all"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
+                  {attachmentMenuOpen && (
+                    <>
+                      <div className="fixed inset-0 z-[90]" onClick={() => setAttachmentMenuOpen(false)} />
+                      <div className="absolute left-0 bottom-full mb-2 z-[100] w-52 rounded-2xl border border-zinc-700/60 bg-zinc-900/95 p-1.5 shadow-2xl backdrop-blur-md">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setAttachmentMenuOpen(false);
+                            fileInputRef.current?.click();
+                          }}
+                          className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-xs text-zinc-300 hover:bg-zinc-800/80"
+                        >
+                          <ImagePlus className="h-3.5 w-3.5 text-sky-400" />
+                          添加户型图
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setAttachmentMenuOpen(false);
+                            setShowStudioPicker(true);
+                          }}
+                          className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-xs text-zinc-300 hover:bg-zinc-800/80"
+                        >
+                          <Building2 className="h-3.5 w-3.5 text-violet-400" />
+                          选择 Studio
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
 
                 {/* Model selector */}
                 <div className="relative">
@@ -348,7 +438,14 @@ export default function HomePage() {
                 <button
                   key={card.label}
                   type="button"
-                  onClick={() => { setPrompt(card.prompt); promptRef.current?.focus(); }}
+                  onClick={() => {
+                    if ((card as { action?: string }).action === "connect-home") {
+                      handleConnectMyHome();
+                      return;
+                    }
+                    setPrompt(card.prompt);
+                    promptRef.current?.focus();
+                  }}
                   className={`group flex-shrink-0 rounded-xl border ${card.bg} px-4 py-3 text-left hover:brightness-110 transition-all`}
                   style={{ minWidth: "160px" }}
                 >
@@ -362,12 +459,11 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Studio ID badge */}
-          <div className="mt-6 flex items-center gap-1.5 rounded-full border border-zinc-800 bg-zinc-900/50 px-3.5 py-2 text-[11px] text-zinc-600 w-fit">
-            <span aria-hidden>🖥️</span>
-            <span>{studioId.current}</span>
-            <Clock className="h-3 w-3" />
-          </div>
+          {actionWarning && (
+            <div className="mt-3 rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-2.5 text-xs text-rose-300">
+              {actionWarning}
+            </div>
+          )}
         </div>
       </div>
 
@@ -389,6 +485,31 @@ export default function HomePage() {
                 onOpenQr={setQrProject}
                 onBuildPlugin={setBuildProject}
                 getBxml={getBxml}
+                qrBuildMeta={qrBuildMeta}
+                onDeployToStudio={setDeployProject}
+                onRemixProject={(project) => {
+                  const remixId = `proj-${Date.now()}`;
+                  addProject({
+                    ...project,
+                    id: remixId,
+                    name: `${project.name} Remix`,
+                    updatedAt: new Date().toISOString(),
+                    studioLinked: false,
+                    agentStep: "describe",
+                    parentProjectId: undefined,
+                  });
+                  router.push(`/projects/${remixId}?mode=space&loading=1&remixFrom=${encodeURIComponent(project.id)}`);
+                }}
+                onRenameProject={(project) => {
+                  const nextName = window.prompt("重命名方案", project.name);
+                  if (!nextName) return;
+                  const trimmed = nextName.trim();
+                  if (!trimmed || trimmed === project.name) return;
+                  updateProject(project.id, {
+                    name: trimmed,
+                    updatedAt: new Date().toISOString(),
+                  });
+                }}
                 onMoveToProjects={(project) => {
                   setMoveBuildProject(project);
                   setTargetProjectId(project.parentProjectId ?? "");
@@ -402,7 +523,65 @@ export default function HomePage() {
       </div>
 
       <LifeAppQrModal project={qrProject} onClose={() => setQrProject(null)} />
-      <BuildPluginModal project={buildProject} onClose={() => setBuildProject(null)} onShowQr={(p) => { setBuildProject(null); setQrProject(p); }} />
+      <BuildPluginModal
+        project={buildProject}
+        onClose={() => setBuildProject(null)}
+        onBuilt={(p) => {
+          setQrBuildMeta((prev) => ({ ...prev, [p.id]: { builtAt: new Date().toISOString() } }));
+        }}
+        onShowQr={(p) => { setBuildProject(null); setQrProject(p); }}
+      />
+      <StudioPickerModal
+        open={showStudioPicker}
+        studios={cloudStudios}
+        selectedStudioId={selectedStudioId}
+        onClose={() => setShowStudioPicker(false)}
+        onConfirm={(studioId) => {
+          setSelectedStudioId(studioId);
+          setShowStudioPicker(false);
+        }}
+      />
+      <ConnectMyHomeModal
+        open={showConnectHome}
+        studios={cloudStudios}
+        selectedStudioId={selectedStudioId}
+        onClose={() => setShowConnectHome(false)}
+        onDeclined={() => {
+          setHomeDataPromptState("declined");
+          setShowConnectHome(false);
+        }}
+        onCreateStudio={() => {
+          const newStudio = {
+            id: `cs-${Date.now()}`,
+            name: `aqarastudio-${Math.floor(1000 + Math.random() * 9000)}`,
+            label: "新云空间",
+            status: "online" as const,
+            devices: 0,
+            rooms: 0,
+            lastSync: "just now",
+            aiotSynced: false,
+            syncedFamilyName: "",
+          };
+          setCloudStudios((prev) => [newStudio, ...prev]);
+          return newStudio;
+        }}
+        onConnected={(studioId, familyName) => {
+          setCloudStudios((prev) =>
+            prev.map((studio) =>
+              studio.id === studioId
+                ? { ...studio, aiotSynced: true, syncedFamilyName: familyName, lastSync: "just now" }
+                : studio
+            )
+          );
+          setHomeDataPromptState("accepted");
+          setSelectedStudioId(studioId);
+          setShowConnectHome(false);
+        }}
+      />
+      <DeployToStudioModal
+        project={deployProject}
+        onClose={() => setDeployProject(null)}
+      />
       <MoveBuildToProjectModal
         buildProject={moveBuildProject}
         containerProjects={containerProjects}
@@ -432,12 +611,20 @@ function ProjectsGrid({
   onOpenQr,
   onBuildPlugin,
   getBxml,
+  qrBuildMeta,
+  onDeployToStudio,
+  onRemixProject,
+  onRenameProject,
   onMoveToProjects,
 }: {
   projects: Project[];
   onOpenQr: (project: Project) => void;
   onBuildPlugin: (project: Project) => void;
   getBxml: (id: string) => BXMLDocument | null;
+  qrBuildMeta: Record<string, { builtAt: string }>;
+  onDeployToStudio: (project: Project) => void;
+  onRemixProject: (project: Project) => void;
+  onRenameProject: (project: Project) => void;
   onMoveToProjects: (project: Project) => void;
 }) {
   const router = useRouter();
@@ -453,15 +640,32 @@ function ProjectsGrid({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {projects.map((p) => (
+        (() => {
+          const built = qrBuildMeta[p.id];
+          const persistedBuild = Boolean(
+            p.rolePluginConfigs?.some((cfg) => cfg.status === "published")
+          );
+          const hasQrBuild = Boolean(built || persistedBuild);
+          const updatedTs = p.updatedAt ? new Date(p.updatedAt).getTime() : 0;
+          const builtTs = built?.builtAt ? new Date(built.builtAt).getTime() : 0;
+          const isQrOutdated = Boolean(built && updatedTs > builtTs);
+          return (
         <ProjectCard
           key={p.id}
           project={p}
           bxmlDoc={getBxml(p.id)}
+          hasQrBuild={hasQrBuild}
+          isQrOutdated={isQrOutdated}
           onClick={() => router.push(`/projects/${p.id}?loading=1`)}
           onOpenQr={() => onOpenQr(p)}
           onBuildPlugin={() => onBuildPlugin(p)}
+          onDeployToStudio={() => onDeployToStudio(p)}
+          onRemix={() => onRemixProject(p)}
+          onRename={() => onRenameProject(p)}
           onMoveToProjects={() => onMoveToProjects(p)}
         />
+          );
+        })()
       ))}
     </div>
   );
@@ -472,16 +676,26 @@ const STEP_LABELS: Record<string, string> = { describe: "Describing", generate: 
 function ProjectCard({
   project,
   bxmlDoc,
+  hasQrBuild,
+  isQrOutdated,
   onClick,
   onOpenQr,
   onBuildPlugin,
+  onDeployToStudio,
+  onRemix,
+  onRename,
   onMoveToProjects,
 }: {
   project: Project;
   bxmlDoc: BXMLDocument | null;
+  hasQrBuild: boolean;
+  isQrOutdated: boolean;
   onClick: () => void;
   onOpenQr: () => void;
   onBuildPlugin: () => void;
+  onDeployToStudio: () => void;
+  onRemix: () => void;
+  onRename: () => void;
   onMoveToProjects: () => void;
 }) {
   const isAiBuild = project.creationMethod === "ai_build" || project.projectType === "ai_build";
@@ -492,11 +706,12 @@ function ProjectCard({
   const [menuOpen, setMenuOpen] = useState(false);
 
   const stats = useMemo(() => bxmlDoc ? getBXMLStats(bxmlDoc) : null, [bxmlDoc]);
-  const hasStats = stats && (stats.spaces + stats.devices + stats.automations + stats.scenes > 0);
+  const hasStats = Boolean(stats && (stats.spaces + stats.devices + stats.automations + stats.scenes > 0));
+  const isDraft = !hasStats;
   const visual = pickVisual(project.id);
 
   return (
-    <div className="group relative rounded-xl border border-zinc-800/50 bg-zinc-900/40 cursor-pointer hover:border-zinc-700/60 hover:bg-zinc-900/60 transition-all overflow-hidden" onClick={onClick}>
+    <div className="group relative rounded-xl border border-zinc-800/50 bg-zinc-900/40 cursor-pointer hover:border-zinc-700/60 hover:bg-zinc-900/60 transition-all overflow-visible" onClick={onClick}>
       {/* Visual area */}
       <div className="relative aspect-[16/9] overflow-hidden" style={{ background: visual.gradient }}>
         <div className="absolute inset-0 flex items-center justify-center gap-3">
@@ -511,39 +726,60 @@ function ProjectCard({
           ) : null}
         </div>
         {isAiBuild && (
-          <span className="absolute top-2 right-2 rounded bg-blue-500/20 backdrop-blur-sm px-1.5 py-0.5 text-[10px] font-medium text-blue-400">AI</span>
+          <span className="absolute top-2 right-2 rounded bg-blue-500/20 backdrop-blur-sm px-1.5 py-0.5 text-[10px] font-medium text-blue-400 transition-opacity group-hover:opacity-0">AI</span>
         )}
         {/* Menu button */}
-        <button type="button" className="absolute bottom-2 right-2 h-6 w-6 flex items-center justify-center rounded-md bg-black/50 backdrop-blur-sm text-zinc-400 hover:text-zinc-200 opacity-0 group-hover:opacity-100 transition-all"
+        <button type="button" className="absolute top-2 right-2 rounded-md border border-zinc-600/50 bg-black/45 px-2 py-1 text-[10px] font-medium text-zinc-200 opacity-0 group-hover:opacity-100 transition-all hover:bg-black/60"
           onClick={(e) => { e.stopPropagation(); setMenuOpen((v) => !v); }}>
-          <MoreHorizontal className="h-3.5 w-3.5" />
+          Details
         </button>
       </div>
 
       {menuOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); }} />
-          <div className="absolute right-2 top-16 z-50 w-48 rounded-xl border border-zinc-700/50 bg-zinc-900 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-1 duration-150">
+          <div className="absolute right-2 top-12 z-50 w-56 rounded-xl border border-zinc-700/50 bg-zinc-900 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-1 duration-150">
+            <div className="px-3 py-1.5 text-[10px] uppercase tracking-wide text-zinc-600">查看 / 进入</div>
             <button type="button" className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-zinc-300 hover:bg-zinc-800/60 transition-colors"
+              onClick={(e) => { e.stopPropagation(); setMenuOpen(false); window.open(`/projects/${project.id}?loading=1`, "_blank", "noopener,noreferrer"); }}>
+              <ExternalLink className="h-3.5 w-3.5 text-zinc-400" /> Open in New Tab
+            </button>
+            <div className="border-t border-zinc-800" />
+            <div className="px-3 py-1.5 text-[10px] uppercase tracking-wide text-zinc-600">生成 / 发布</div>
+            <button type="button" disabled={isDraft} className={`flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs transition-colors ${isDraft ? "text-zinc-600 cursor-not-allowed" : "text-zinc-300 hover:bg-zinc-800/60"}`}
               onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onBuildPlugin(); }}>
-              <Package className="h-3.5 w-3.5 text-emerald-400" /> Build Plugin
+              <Package className={`h-3.5 w-3.5 ${isDraft ? "text-zinc-700" : "text-violet-400"}`} /> Build App Plugin
+            </button>
+            <button
+              type="button"
+              disabled={!hasQrBuild}
+              className={`flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs transition-colors ${!hasQrBuild ? "text-zinc-600 cursor-not-allowed" : isQrOutdated ? "text-amber-300 hover:bg-zinc-800/60" : "text-zinc-300 hover:bg-zinc-800/60"}`}
+              onClick={(e) => { e.stopPropagation(); if (!hasQrBuild) return; setMenuOpen(false); onOpenQr(); }}
+            >
+              <Smartphone className={`h-3.5 w-3.5 ${!hasQrBuild ? "text-zinc-700" : isQrOutdated ? "text-amber-400" : "text-blue-400"}`} />
+              {isQrOutdated ? "Preview outdated?" : "View QR Code"}
+            </button>
+            {hasQrBuild && isQrOutdated && (
+              <p className="px-3 pb-2 text-[10px] text-amber-300/85">当前二维码基于上一次 build，不包含最新修改</p>
+            )}
+            <button type="button" disabled={isDraft} className={`flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs transition-colors ${isDraft ? "text-zinc-600 cursor-not-allowed" : "text-zinc-300 hover:bg-zinc-800/60"}`}
+              onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onDeployToStudio(); }}>
+              <CloudUpload className={`h-3.5 w-3.5 ${isDraft ? "text-zinc-700" : "text-sky-400"}`} />
+              Deploy to Studio
+            </button>
+            <div className="border-t border-zinc-800" />
+            <div className="px-3 py-1.5 text-[10px] uppercase tracking-wide text-zinc-600">编辑 / 衍生</div>
+            <button type="button" className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-zinc-300 hover:bg-zinc-800/60 transition-colors"
+              onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onRemix(); }}>
+              <Sparkles className="h-3.5 w-3.5 text-emerald-400" /> Remix
             </button>
             <button type="button" className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-zinc-300 hover:bg-zinc-800/60 transition-colors"
-              onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onOpenQr(); }}>
-              <Smartphone className="h-3.5 w-3.5 text-blue-400" /> QR Code
+              onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onRename(); }}>
+              <FileSpreadsheet className="h-3.5 w-3.5 text-zinc-400" /> Rename
             </button>
             <button type="button" className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-zinc-300 hover:bg-zinc-800/60 transition-colors"
               onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onMoveToProjects(); }}>
               <FolderInput className="h-3.5 w-3.5 text-amber-400" /> Move to Projects
-            </button>
-            <div className="border-t border-zinc-800" />
-            <button type="button" className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-zinc-300 hover:bg-zinc-800/60 transition-colors"
-              onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onClick(); }}>
-              <Eye className="h-3.5 w-3.5 text-indigo-400" /> Open Project
-            </button>
-            <button type="button" className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs text-zinc-300 hover:bg-zinc-800/60 transition-colors"
-              onClick={(e) => { e.stopPropagation(); setMenuOpen(false); }}>
-              <Rocket className="h-3.5 w-3.5 text-amber-400" /> Publish to Explore
             </button>
           </div>
         </>
@@ -554,15 +790,16 @@ function ProjectCard({
         <h3 className="text-sm font-semibold text-zinc-100 truncate mb-1">{project.name}</h3>
         <div className="flex items-center gap-2 mb-2">
           {timeAgo && <span className="flex items-center gap-1 text-[11px] text-zinc-600"><Clock className="h-3 w-3" aria-hidden /> {timeAgo}</span>}
+          {isDraft && <span className="rounded-full border border-zinc-700/80 bg-zinc-800/60 px-1.5 py-0.5 text-[10px] text-zinc-400">Draft</span>}
         </div>
 
         {hasStats ? (
           <div className="grid grid-cols-4 gap-1">
             {[
-              { label: "空间", value: stats.spaces, color: "text-violet-400" },
-              { label: "设备", value: stats.devices, color: "text-sky-400" },
-              { label: "自动", value: stats.automations, color: "text-amber-400" },
-              { label: "场景", value: stats.scenes, color: "text-emerald-400" },
+              { label: "空间", value: stats!.spaces, color: "text-violet-400" },
+              { label: "设备", value: stats!.devices, color: "text-sky-400" },
+              { label: "自动", value: stats!.automations, color: "text-amber-400" },
+              { label: "场景", value: stats!.scenes, color: "text-emerald-400" },
             ].map((s) => (
               <div key={s.label} className="rounded-md bg-zinc-800/40 px-1.5 py-1 text-center">
                 <p className={`text-xs font-semibold ${s.color}`}>{s.value}</p>
@@ -695,36 +932,285 @@ function LifeAppQrModal({ project, onClose }: { project: Project | null; onClose
   );
 }
 
-const BUILD_STEPS = [
-  { id: "sandbox", label: "Cloud Sandbox Verification", delay: 1200 },
-  { id: "scan", label: "Security Scan", delay: 800 },
-  { id: "build", label: "Plugin Package Build", delay: 1500 },
-  { id: "cdn", label: "CDN Distribution", delay: 800 },
-  { id: "qr", label: "QR Code Generation", delay: 500 },
+type AgentEntry = {
+  id: number;
+  kind: "think" | "action" | "result" | "warn" | "done";
+  text: string;
+};
+
+const AGENT_SCRIPT: { kind: AgentEntry["kind"]; text: string; delay: number }[] = [
+  { kind: "think",  text: "Reading BXML structure and space graph…",                        delay: 600  },
+  { kind: "action", text: "parse_bxml({ source: 'space_graph.xml' })",                      delay: 700  },
+  { kind: "result", text: "Found 4 rooms · 12 devices · 3 scenes · 8 automation rules",    delay: 500  },
+  { kind: "think",  text: "Resolving semantic ID bindings against Studio device catalog…",  delay: 800  },
+  { kind: "action", text: "resolve_semantic_ids({ strict: false })",                        delay: 900  },
+  { kind: "result", text: "11 / 12 devices matched  ·  1 fallback applied",                delay: 400  },
+  { kind: "warn",   text: "camera_entrance has no real binding — using preview placeholder",delay: 300  },
+  { kind: "think",  text: "Generating plugin manifest and role config (owner role)…",       delay: 700  },
+  { kind: "action", text: "generate_manifest({ roles: ['owner'], theme: 'home_warm' })",    delay: 1000 },
+  { kind: "result", text: "Manifest v1 created  ·  UI pages: 5  ·  widgets: 24",           delay: 400  },
+  { kind: "think",  text: "Packaging assets and running sandbox verification…",             delay: 600  },
+  { kind: "action", text: "pack_plugin({ target: 'cloud', minify: true })",                delay: 1400 },
+  { kind: "result", text: "Bundle 48 KB  ·  sandbox checks passed",                        delay: 500  },
+  { kind: "action", text: "distribute_cdn({ regions: ['CN', 'US'] })",                     delay: 900  },
+  { kind: "result", text: "CDN propagation complete  ·  avg latency 12 ms",                delay: 400  },
+  { kind: "action", text: "generate_qr({ ttl: 'permanent', access: 'owner' })",            delay: 600  },
+  { kind: "done",   text: "Plugin ready — pluginId: plg_xxxxxxxx",                         delay: 0    },
 ];
 
-function BuildPluginModal({ project, onClose, onShowQr }: { project: Project | null; onClose: () => void; onShowQr: (p: Project) => void }) {
-  const [stages, setStages] = useState<{ id: string; label: string; status: "pending" | "running" | "done" }[]>([]);
-  const [building, setBuilding] = useState(false);
-  const [done, setDone] = useState(false);
+function BuildPluginModal({
+  project,
+  onClose,
+  onBuilt,
+  onShowQr,
+}: {
+  project: Project | null;
+  onClose: () => void;
+  onBuilt: (p: Project) => void;
+  onShowQr: (p: Project) => void;
+}) {
+  const [log, setLog] = React.useState<AgentEntry[]>([]);
+  const [running, setRunning] = React.useState(false);
+  const [done, setDone] = React.useState(false);
+  const logRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    if (!project) { setStages([]); setBuilding(false); setDone(false); }
+    if (!project) { setLog([]); setRunning(false); setDone(false); }
   }, [project]);
+
+  React.useEffect(() => {
+    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
+  }, [log]);
 
   if (!project) return null;
 
   const startBuild = () => {
-    setBuilding(true);
-    setStages(BUILD_STEPS.map((s) => ({ id: s.id, label: s.label, status: "pending" })));
-    let total = 200;
-    BUILD_STEPS.forEach((step, i) => {
-      setTimeout(() => setStages((prev) => prev.map((s) => s.id === step.id ? { ...s, status: "running" } : s)), total);
-      total += step.delay;
+    setRunning(true);
+    let cursor = 0;
+    AGENT_SCRIPT.forEach((entry, i) => {
+      cursor += 400 + entry.delay;
       setTimeout(() => {
-        setStages((prev) => prev.map((s) => s.id === step.id ? { ...s, status: "done" } : s));
-        if (i === BUILD_STEPS.length - 1) setTimeout(() => { setBuilding(false); setDone(true); }, 300);
-      }, total);
+        setLog((prev) => [...prev, { id: i, kind: entry.kind, text: entry.text }]);
+        if (entry.kind === "done") setTimeout(() => {
+          setRunning(false);
+          setDone(true);
+          onBuilt(project);
+        }, 300);
+      }, cursor);
+    });
+  };
+
+  const kindMeta: Record<AgentEntry["kind"], { label: string; labelColor: string; textColor: string }> = {
+    think:  { label: "think",  labelColor: "text-violet-400",  textColor: "text-zinc-400"  },
+    action: { label: "call",   labelColor: "text-sky-400",     textColor: "text-zinc-200"  },
+    result: { label: "obs",    labelColor: "text-emerald-400", textColor: "text-zinc-300"  },
+    warn:   { label: "warn",   labelColor: "text-amber-400",   textColor: "text-amber-200" },
+    done:   { label: "done",   labelColor: "text-emerald-400", textColor: "text-emerald-300"},
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="w-full max-w-lg rounded-2xl border border-zinc-800 bg-zinc-950 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        {/* header */}
+        <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-violet-500/15">
+              <Package className="h-4 w-4 text-violet-400" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-zinc-100">Build Plugin</h3>
+              <p className="text-[11px] text-zinc-500">{project.name}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            {running && (
+              <span className="flex items-center gap-1.5 rounded-full bg-violet-500/10 px-2.5 py-1 text-[10px] font-medium text-violet-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-violet-400 animate-pulse" />
+                running
+              </span>
+            )}
+            <button type="button" onClick={onClose} className="rounded-lg p-1.5 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* idle state */}
+        {!running && !done && log.length === 0 && (
+          <div className="p-6 text-center">
+            <p className="text-sm text-zinc-300 mb-1">Package this space design into a Life App plugin</p>
+            <p className="text-xs text-zinc-500 mb-5">The agent will analyze BXML, resolve device bindings, and generate a scannable QR plugin.</p>
+            <button type="button" onClick={startBuild} className="rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-violet-500 transition-colors">
+              Start Build
+            </button>
+          </div>
+        )}
+
+        {/* agent log */}
+        {(running || log.length > 0) && (
+          <div ref={logRef} className="max-h-72 overflow-y-auto px-4 py-3 space-y-1.5 font-mono text-[11px]">
+            {log.map((entry) => {
+              const m = kindMeta[entry.kind];
+              return (
+                <div key={entry.id} className="flex items-start gap-2">
+                  <span className={`shrink-0 w-9 text-right ${m.labelColor} opacity-70`}>{m.label}</span>
+                  <span className="text-zinc-700 shrink-0">›</span>
+                  <span className={m.textColor}>{entry.text}</span>
+                </div>
+              );
+            })}
+            {running && (
+              <div className="flex items-center gap-2 pt-0.5">
+                <span className="w-9 text-right text-zinc-600 opacity-70">···</span>
+                <span className="text-zinc-700 shrink-0">›</span>
+                <span className="flex gap-1">
+                  {[0, 1, 2].map((i) => (
+                    <span key={i} className="h-1 w-1 rounded-full bg-zinc-600 animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
+                  ))}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* done footer */}
+        {done && (
+          <div className="border-t border-zinc-800 px-5 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-2 text-xs text-emerald-400">
+              <Check className="h-3.5 w-3.5" />
+              Plugin ready
+            </div>
+            <button type="button" onClick={() => onShowQr(project)} className="rounded-xl bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-500 transition-colors">
+              Show QR Code →
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function StudioPickerModal({
+  open,
+  studios,
+  selectedStudioId,
+  onClose,
+  onConfirm,
+}: {
+  open: boolean;
+  studios: typeof MOCK_CLOUD_STUDIOS;
+  selectedStudioId: string | null;
+  onClose: () => void;
+  onConfirm: (studioId: string) => void;
+}) {
+  const [localSelection, setLocalSelection] = React.useState<string | null>(selectedStudioId);
+  React.useEffect(() => {
+    if (open) setLocalSelection(selectedStudioId);
+  }, [open, selectedStudioId]);
+
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-950 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
+          <h3 className="text-sm font-semibold text-zinc-100">选择 Studio 上下文</h3>
+          <button type="button" onClick={onClose} className="rounded-lg p-1.5 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="p-4 space-y-2">
+          {studios.length === 0 ? (
+            <p className="rounded-xl border border-zinc-800 bg-zinc-900/40 px-3 py-4 text-center text-xs text-zinc-500">当前没有可用 Studio，请先点击「连接我的家」创建云 Studio。</p>
+          ) : (
+            studios.map((studio) => (
+              <button
+                key={studio.id}
+                type="button"
+                onClick={() => setLocalSelection(studio.id)}
+                className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all ${localSelection === studio.id ? "border-violet-500/40 bg-violet-500/[0.06]" : "border-zinc-800 hover:border-zinc-700"}`}
+              >
+                <span className={`h-2 w-2 rounded-full ${studio.status === "online" ? "bg-emerald-400" : "bg-zinc-600"}`} />
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-medium text-zinc-200">{studio.name}</p>
+                  <p className="text-[11px] text-zinc-500">{studio.devices} 台设备 · {studio.rooms} 个空间</p>
+                </div>
+                {localSelection === studio.id && <Check className="h-4 w-4 text-violet-400" />}
+              </button>
+            ))
+          )}
+        </div>
+        <div className="flex justify-end gap-2 border-t border-zinc-800 px-4 py-3">
+          <button type="button" onClick={onClose} className="rounded-lg px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200">取消</button>
+          <button
+            type="button"
+            disabled={!localSelection}
+            onClick={() => localSelection && onConfirm(localSelection)}
+            className="rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-violet-500 disabled:opacity-40"
+          >
+            确认
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const CONNECT_SYNC_LOG: { kind: "think" | "action" | "result" | "done"; text: string; delay: number }[] = [
+  { kind: "think", text: "正在读取你选择的家庭信息…", delay: 450 },
+  { kind: "action", text: "正在同步房间和设备到目标 Studio…", delay: 850 },
+  { kind: "result", text: "家庭数据已同步，正在整理创作所需信息…", delay: 600 },
+  { kind: "done", text: "已准备完成，可继续创作。", delay: 0 },
+];
+
+function ConnectMyHomeModal({
+  open,
+  studios,
+  selectedStudioId,
+  onClose,
+  onDeclined,
+  onCreateStudio,
+  onConnected,
+}: {
+  open: boolean;
+  studios: typeof MOCK_CLOUD_STUDIOS;
+  selectedStudioId: string | null;
+  onClose: () => void;
+  onDeclined: () => void;
+  onCreateStudio: () => (typeof MOCK_CLOUD_STUDIOS)[number] | null;
+  onConnected: (studioId: string, familyName: string) => void;
+}) {
+  const [step, setStep] = React.useState<"no-family" | "select-family" | "create-confirm" | "creating" | "select-studio" | "syncing" | "done">("select-family");
+  const [activeStudioId, setActiveStudioId] = React.useState<string>(selectedStudioId ?? studios[0]?.id ?? "");
+  const [selectedFamilyId, setSelectedFamilyId] = React.useState<string>(MOCK_AIOT_FAMILIES[0]?.id ?? "");
+  const [syncLog, setSyncLog] = React.useState<typeof CONNECT_SYNC_LOG>([]);
+  const logRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (!open) return;
+    const nextStudio = selectedStudioId ?? studios[0]?.id ?? "";
+    setActiveStudioId(nextStudio);
+    setSelectedFamilyId(MOCK_AIOT_FAMILIES[0]?.id ?? "");
+    setSyncLog([]);
+    setStep(MOCK_AIOT_FAMILIES.length === 0 ? "no-family" : "select-family");
+  }, [open, studios, selectedStudioId]);
+
+  React.useEffect(() => {
+    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
+  }, [syncLog]);
+
+  if (!open) return null;
+
+  const activeStudio = studios.find((s) => s.id === activeStudioId);
+
+  const beginSync = () => {
+    setStep("syncing");
+    let cursor = 0;
+    CONNECT_SYNC_LOG.forEach((entry) => {
+      cursor += 300 + entry.delay;
+      setTimeout(() => {
+        setSyncLog((prev) => [...prev, entry]);
+        if (entry.kind === "done") setTimeout(() => setStep("done"), 250);
+      }, cursor);
     });
   };
 
@@ -732,49 +1218,167 @@ function BuildPluginModal({ project, onClose, onShowQr }: { project: Project | n
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm p-4" onClick={onClose}>
       <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-950 shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
-          <div>
-            <h3 className="text-base font-semibold text-zinc-100">Build Plugin</h3>
-            <p className="mt-1 text-xs text-zinc-500">{project.name}</p>
-          </div>
-          <button type="button" onClick={onClose} className="rounded-lg p-2 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60"><X className="h-4 w-4" /></button>
+          <h3 className="text-sm font-semibold text-zinc-100">连接我的家</h3>
+          <button type="button" onClick={onClose} className="rounded-lg p-1.5 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60">
+            <X className="h-4 w-4" />
+          </button>
         </div>
-        <div className="p-5">
-          {!building && !done && stages.length === 0 && (
-            <div className="text-center py-4">
-              <Package className="h-10 w-10 text-zinc-600 mx-auto mb-3" />
-              <p className="text-sm text-zinc-300 mb-1">Build Life App Plugin</p>
-              <p className="text-xs text-zinc-500 mb-5">Package this space design into a scannable QR plugin</p>
-              <button type="button" onClick={startBuild} className="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-500 transition-colors">Start Build</button>
+
+        {step === "no-family" && (
+          <div className="p-5">
+            <p className="text-sm text-zinc-300">当前 Aqara Home 账号下暂无可用家庭。</p>
+            <p className="mt-1 text-xs text-zinc-500">本次流程已结束，可先在 Aqara Home 中创建家庭后再继续连接。</p>
+            <div className="mt-5 flex justify-end">
+              <button type="button" onClick={onClose} className="rounded-lg bg-zinc-800 px-3 py-1.5 text-xs text-zinc-200 hover:bg-zinc-700">完成</button>
             </div>
-          )}
-          {(building || stages.length > 0) && (
+          </div>
+        )}
+
+        {step === "create-confirm" && (
+          <div className="p-5">
+            <p className="text-sm text-zinc-300">当前还没有可用的 Studio，请先获取一台 Studio。</p>
+            <p className="mt-1 text-xs text-zinc-500">点击 Try Online Demo 可快速创建一台在线 Studio。</p>
+            <div className="mt-5 flex justify-end gap-2">
+              <button type="button" onClick={onDeclined} className="rounded-lg px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200">取消</button>
+              <button
+                type="button"
+                onClick={() => {
+                  setStep("creating");
+                  setTimeout(() => {
+                    const created = onCreateStudio();
+                    if (!created) {
+                      onClose();
+                      return;
+                    }
+                    setActiveStudioId(created.id);
+                    setStep("syncing");
+                    beginSync();
+                  }, 700);
+                }}
+                className="rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-violet-500"
+              >
+                Try Online Demo
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === "creating" && (
+          <div className="p-6 text-center">
+            <div className="mx-auto mb-3 h-8 w-8 rounded-full border-2 border-violet-500/40 border-t-violet-400 animate-spin" />
+            <p className="text-sm text-zinc-300">正在创建云 Studio…</p>
+          </div>
+        )}
+
+        {step === "select-family" && (
+          <div className="p-4">
+            <p className="mb-3 text-xs text-zinc-500">请选择一个 Aqara Home 家庭，作为本次创作的数据来源。</p>
             <div className="space-y-2">
-              {stages.map((s) => (
-                <div key={s.id} className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900/50 px-3 py-2.5">
-                  {s.status === "pending" && <div className="h-4 w-4 rounded-full border-2 border-zinc-700 shrink-0" />}
-                  {s.status === "running" && <div className="h-4 w-4 rounded-full border-2 border-t-blue-400 border-zinc-700 animate-spin shrink-0" />}
-                  {s.status === "done" && <Check className="h-4 w-4 text-emerald-400 shrink-0" />}
-                  <span className={`text-xs ${s.status === "pending" ? "text-zinc-600" : s.status === "running" ? "text-zinc-200" : "text-zinc-300"}`}>{s.label}</span>
-                </div>
+              {MOCK_AIOT_FAMILIES.map((fam) => (
+                <button
+                  key={fam.id}
+                  type="button"
+                  onClick={() => setSelectedFamilyId(fam.id)}
+                  className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all ${selectedFamilyId === fam.id ? "border-emerald-500/40 bg-emerald-500/5" : "border-zinc-800 hover:border-zinc-700"}`}
+                >
+                  <Home className={`h-4 w-4 ${selectedFamilyId === fam.id ? "text-emerald-400" : "text-zinc-500"}`} />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-medium text-zinc-200">{fam.name}</p>
+                  </div>
+                  {selectedFamilyId === fam.id && <Check className="h-4 w-4 text-emerald-400" />}
+                </button>
               ))}
             </div>
-          )}
-          {done && (
-            <div className="mt-4 text-center">
-              <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 mb-4">
-                <p className="text-sm font-medium text-emerald-300">Plugin ready!</p>
-                <p className="text-xs text-zinc-500 mt-1">Scan QR to install in Aqara Life</p>
-              </div>
-              <button type="button" onClick={() => onShowQr(project)} className="rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 transition-colors">Show QR Code</button>
+            <div className="mt-4 flex justify-end gap-2">
+              <button type="button" onClick={onDeclined} className="rounded-lg px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200">取消</button>
+              <button
+                type="button"
+                disabled={!selectedFamilyId}
+                onClick={() => setStep(studios.length === 0 ? "create-confirm" : "select-studio")}
+                className="rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-violet-500 disabled:opacity-40"
+              >
+                下一步
+              </button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {step === "select-studio" && (
+          <div className="p-4">
+            <p className="mb-3 text-xs text-zinc-500">请选择目标 Studio，系统将把家庭数据同步到该 Studio。</p>
+            <div className="space-y-2">
+              {studios.map((studio) => (
+                <button
+                  key={studio.id}
+                  type="button"
+                  onClick={() => setActiveStudioId(studio.id)}
+                  className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all ${activeStudioId === studio.id ? "border-violet-500/40 bg-violet-500/[0.06]" : "border-zinc-800 hover:border-zinc-700"}`}
+                >
+                  <span className={`h-2 w-2 rounded-full ${studio.status === "online" ? "bg-emerald-400" : "bg-zinc-600"}`} />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-medium text-zinc-200">{studio.name}</p>
+                    <p className={`text-[11px] ${studio.aiotSynced ? "text-emerald-400/90" : "text-zinc-500"}`}>
+                      {studio.aiotSynced ? `已同步 Aqara Home 家庭数据${studio.syncedFamilyName ? ` · ${studio.syncedFamilyName}` : ""}` : "未同步家庭数据"}
+                    </p>
+                  </div>
+                  {activeStudioId === studio.id && <Check className="h-4 w-4 text-violet-400" />}
+                </button>
+              ))}
+            </div>
+            {activeStudio?.aiotSynced && (
+              <p className="mb-3 rounded-lg border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-[11px] text-amber-300">
+                该 Studio 已同步过 Aqara Home 家庭数据，继续同步时系统会自动处理重复数据。
+              </p>
+            )}
+            <div className="mt-4 flex justify-end gap-2">
+              <button type="button" onClick={onDeclined} className="rounded-lg px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200">取消</button>
+              <button type="button" onClick={beginSync} disabled={!activeStudioId} className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-500 disabled:opacity-40">确认并同步</button>
+            </div>
+          </div>
+        )}
+
+        {(step === "syncing" || step === "done") && (
+          <div className="p-4">
+            <div ref={logRef} className="max-h-48 space-y-1.5 overflow-y-auto text-[11px]">
+              {syncLog.map((entry, idx) => (
+                <div key={idx} className="flex items-start gap-2">
+                  <span className="w-9 shrink-0 text-right text-zinc-600">
+                    {entry.kind === "think" ? "AI" : entry.kind === "action" ? "同步" : entry.kind === "result" ? "结果" : "完成"}
+                  </span>
+                  <span className="text-zinc-700">›</span>
+                  <span className={entry.kind === "done" ? "text-emerald-300" : "text-zinc-400"}>{entry.text}</span>
+                </div>
+              ))}
+              {step === "syncing" && (
+                <div className="flex items-center gap-1 pl-11">
+                  {[0, 1, 2].map((i) => <span key={i} className="h-1 w-1 rounded-full bg-zinc-600 animate-bounce" style={{ animationDelay: `${i * 120}ms` }} />)}
+                </div>
+              )}
+            </div>
+            {step === "done" && (
+              <div className="mt-4 flex items-center justify-between border-t border-zinc-800 pt-4">
+                <span className="text-xs text-emerald-300">已同步完成，返回继续创作</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!activeStudioId) return;
+                    const fam = MOCK_AIOT_FAMILIES.find((f) => f.id === selectedFamilyId);
+                    onConnected(activeStudioId, fam?.name ?? "");
+                  }}
+                  className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-500"
+                >
+                  完成
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-/* ── Move to Project Modal ── */
+/* ── Move to Projects Modal ── */
 function MoveBuildToProjectModal({
   buildProject,
   containerProjects,
@@ -796,8 +1400,8 @@ function MoveBuildToProjectModal({
       <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-950 shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
           <div>
-            <h3 className="text-base font-semibold text-zinc-100">Move to Project</h3>
-            <p className="mt-1 text-xs text-zinc-500">Move "{buildProject.name}" into a container project</p>
+            <h3 className="text-base font-semibold text-zinc-100">Move to Projects</h3>
+            <p className="mt-1 text-xs text-zinc-500">Move "{buildProject.name}" into another project</p>
           </div>
           <button type="button" onClick={onClose} className="rounded-lg p-2 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60"><X className="h-4 w-4" /></button>
         </div>
@@ -829,6 +1433,403 @@ function MoveBuildToProjectModal({
             <button type="button" disabled={!targetProjectId} onClick={onConfirm} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">Move</button>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Get Cloud Studio Modal (used in project canvas conversation) ── */
+function GetStudioModal({
+  open,
+  onClose,
+  onActivated,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onActivated: (name: string) => void;
+}) {
+  const [step, setStep] = React.useState<"intro" | "activating" | "done">("intro");
+  const [log, setLog] = React.useState<string[]>([]);
+  const logRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (!open) { setStep("intro"); setLog([]); }
+  }, [open]);
+
+  React.useEffect(() => {
+    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
+  }, [log]);
+
+  const ACTIVATE_LOG = [
+    { text: "Allocating Cloud Studio instance in CN region…", delay: 500 },
+    { text: "Provisioning Studio Core runtime…", delay: 900 },
+    { text: "Installing device catalog & BXML engine…", delay: 1000 },
+    { text: "Configuring knowledge graph endpoints…", delay: 800 },
+    { text: "Studio online · aqarastudio-7831", delay: 700 },
+  ];
+
+  const activate = () => {
+    setStep("activating");
+    let cursor = 0;
+    ACTIVATE_LOG.forEach((entry, i) => {
+      cursor += entry.delay;
+      setTimeout(() => {
+        setLog((prev) => [...prev, entry.text]);
+        if (i === ACTIVATE_LOG.length - 1) setTimeout(() => setStep("done"), 400);
+      }, cursor);
+    });
+  };
+
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-950 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-500/15">
+              <CloudUpload className="h-4 w-4 text-sky-400" />
+            </div>
+            <h3 className="text-sm font-semibold text-zinc-100">获取 Cloud Studio</h3>
+          </div>
+          <button type="button" onClick={onClose} className="rounded-lg p-1.5 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        {step === "intro" && (
+          <div className="p-6">
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              {[
+                { icon: Zap, label: "即时部署", desc: "BXML 方案一键上线，无需本地硬件" },
+                { icon: RefreshCw, label: "AIOT 同步", desc: "自动导入账号下的家庭和设备数据" },
+                { icon: Home, label: "远程控制", desc: "Life App 登录即可实控所有设备" },
+                { icon: ArrowRight, label: "迁移到 M300", desc: "满意后一键迁移到本地硬件" },
+              ].map((item) => (
+                <div key={item.label} className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-3">
+                  <item.icon className="h-4 w-4 text-sky-400 mb-2" />
+                  <p className="text-xs font-medium text-zinc-200">{item.label}</p>
+                  <p className="text-[11px] text-zinc-500 mt-0.5">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+            <button type="button" onClick={activate}
+              className="w-full rounded-xl bg-sky-600 py-3 text-sm font-semibold text-white hover:bg-sky-500 transition-colors">
+              免费领取 5 天试用
+            </button>
+            <p className="text-center text-[11px] text-zinc-600 mt-2">到期后可续费或迁移到 M300 本地设备</p>
+          </div>
+        )}
+
+        {(step === "activating" || step === "done") && (
+          <div className="p-4">
+            <div ref={logRef} className="font-mono text-[11px] space-y-1.5 max-h-48 overflow-y-auto">
+              {log.map((line, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  {i === log.length - 1 && step === "done"
+                    ? <Check className="h-3.5 w-3.5 text-emerald-400 mt-0.5 shrink-0" />
+                    : <span className="text-zinc-600 shrink-0 mt-0.5">›</span>}
+                  <span className={i === log.length - 1 && step === "done" ? "text-emerald-300" : "text-zinc-400"}>{line}</span>
+                </div>
+              ))}
+              {step === "activating" && (
+                <div className="flex gap-1 pt-1 pl-5">
+                  {[0, 1, 2].map((i) => (
+                    <span key={i} className="h-1 w-1 rounded-full bg-zinc-600 animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
+                  ))}
+                </div>
+              )}
+            </div>
+            {step === "done" && (
+              <div className="mt-4 border-t border-zinc-800 pt-4 flex justify-end">
+                <button type="button" onClick={() => onActivated("aqarastudio-7831")}
+                  className="rounded-xl bg-emerald-600 px-5 py-2 text-sm font-medium text-white hover:bg-emerald-500 transition-colors">
+                  开始使用 →
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ── AIOT Sync Modal ── */
+const AIOT_SYNC_LOG: { kind: "think" | "action" | "result" | "done"; text: string; delay: number }[] = [
+  { kind: "think",  text: "Reading AIOT account families and device topology…",       delay: 500  },
+  { kind: "action", text: "fetch_aiot_families({ account: 'current' })",              delay: 700  },
+  { kind: "result", text: "Found 2 families · 22 devices total",                      delay: 400  },
+  { kind: "think",  text: "Mapping AIOT device models to Studio semantic catalog…",   delay: 600  },
+  { kind: "action", text: "map_devices({ strategy: 'semantic_match', strict: false })", delay: 1100 },
+  { kind: "result", text: "20 / 22 devices matched  ·  2 require manual binding",    delay: 400  },
+  { kind: "think",  text: "Building space graph from room metadata…",                 delay: 700  },
+  { kind: "action", text: "build_space_graph({ source: 'aiot_home' })",               delay: 1000 },
+  { kind: "result", text: "Space graph ready: 6 rooms · 20 devices · 8 scenes",      delay: 400  },
+  { kind: "action", text: "push_to_studio({ target: 'cloud', merge: 'replace' })",   delay: 900  },
+  { kind: "done",   text: "Sync complete — data available in Cloud Studio",           delay: 0    },
+];
+
+function AiotSyncModal({ open, studioName, onClose }: { open: boolean; studioName: string; onClose: () => void }) {
+  const [selected, setSelected] = React.useState<Set<string>>(new Set(MOCK_AIOT_FAMILIES.map((f) => f.id)));
+  const [phase, setPhase] = React.useState<"select" | "syncing" | "done">("select");
+  const [log, setLog] = React.useState<typeof AIOT_SYNC_LOG>([]);
+  const logRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (!open) { setPhase("select"); setLog([]); setSelected(new Set(MOCK_AIOT_FAMILIES.map((f) => f.id))); }
+  }, [open]);
+
+  React.useEffect(() => {
+    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
+  }, [log]);
+
+  const startSync = () => {
+    setPhase("syncing");
+    let cursor = 0;
+    AIOT_SYNC_LOG.forEach((entry, i) => {
+      cursor += 400 + entry.delay;
+      setTimeout(() => {
+        setLog((prev) => [...prev, entry]);
+        if (entry.kind === "done") setTimeout(() => setPhase("done"), 300);
+      }, cursor);
+    });
+  };
+
+  const kindStyle = {
+    think:  { label: "think",  color: "text-violet-400" },
+    action: { label: "call",   color: "text-sky-400"    },
+    result: { label: "obs",    color: "text-emerald-400" },
+    done:   { label: "done",   color: "text-emerald-400" },
+  };
+
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-950 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-500/15">
+              <RefreshCw className="h-4 w-4 text-emerald-400" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-zinc-100">同步 AIOT 数据</h3>
+              <p className="text-[11px] text-zinc-500">目标：{studioName}</p>
+            </div>
+          </div>
+          <button type="button" onClick={onClose} className="rounded-lg p-1.5 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        {phase === "select" && (
+          <div className="p-5">
+            <p className="text-xs text-zinc-500 mb-3">检测到以下 AIOT 家庭，选择需要同步的数据：</p>
+            <div className="space-y-2 mb-5">
+              {MOCK_AIOT_FAMILIES.map((fam) => (
+                <button
+                  key={fam.id}
+                  type="button"
+                  onClick={() => setSelected((prev) => {
+                    const next = new Set(prev);
+                    next.has(fam.id) ? next.delete(fam.id) : next.add(fam.id);
+                    return next;
+                  })}
+                  className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all ${selected.has(fam.id) ? "border-emerald-500/40 bg-emerald-500/5" : "border-zinc-800 hover:border-zinc-700"}`}
+                >
+                  <div className={`flex h-8 w-8 items-center justify-center rounded-xl text-sm ${selected.has(fam.id) ? "bg-emerald-500/15" : "bg-zinc-800"}`}>
+                    <Home className={`h-4 w-4 ${selected.has(fam.id) ? "text-emerald-400" : "text-zinc-600"}`} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-zinc-200">{fam.name}</p>
+                  </div>
+                  <div className={`h-4 w-4 rounded border flex items-center justify-center transition-all ${selected.has(fam.id) ? "bg-emerald-500 border-emerald-500" : "border-zinc-700"}`}>
+                    {selected.has(fam.id) && <Check className="h-3 w-3 text-white" />}
+                  </div>
+                </button>
+              ))}
+            </div>
+            <div className="flex items-center justify-between">
+              <p className="text-[11px] text-zinc-600">已选 {selected.size} 个家庭</p>
+              <button type="button" disabled={selected.size === 0} onClick={startSync}
+                className="rounded-xl bg-emerald-600 px-5 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-30 transition-colors">
+                开始同步
+              </button>
+            </div>
+          </div>
+        )}
+
+        {(phase === "syncing" || phase === "done") && (
+          <div className="p-4">
+            <div ref={logRef} className="font-mono text-[11px] space-y-1.5 max-h-56 overflow-y-auto">
+              {log.map((entry, i) => {
+                const s = kindStyle[entry.kind];
+                return (
+                  <div key={i} className="flex items-start gap-2">
+                    <span className={`w-9 text-right shrink-0 ${s.color} opacity-70`}>{s.label}</span>
+                    <span className="text-zinc-700 shrink-0">›</span>
+                    <span className={entry.kind === "done" ? "text-emerald-300" : entry.kind === "result" ? "text-zinc-300" : "text-zinc-400"}>{entry.text}</span>
+                  </div>
+                );
+              })}
+              {phase === "syncing" && (
+                <div className="flex items-center gap-2 pl-11 pt-0.5">
+                  {[0, 1, 2].map((i) => (
+                    <span key={i} className="h-1 w-1 rounded-full bg-zinc-600 animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
+                  ))}
+                </div>
+              )}
+            </div>
+            {phase === "done" && (
+              <div className="border-t border-zinc-800 mt-4 pt-4 flex items-center justify-between">
+                <p className="text-xs text-zinc-500">可在 Cloud Studio Web 中查看已导入的空间和设备数据</p>
+                <button type="button" onClick={onClose}
+                  className="rounded-xl bg-zinc-800 px-4 py-2 text-xs font-medium text-zinc-200 hover:bg-zinc-700 transition-colors">
+                  完成
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ── Deploy to Studio Modal ── */
+const DEPLOY_LOG: { kind: "think" | "action" | "result" | "done"; text: string; delay: number }[] = [
+  { kind: "think",  text: "Validating BXML schema and semantic ID integrity…",        delay: 500  },
+  { kind: "action", text: "validate_bxml({ strict: true })",                          delay: 700  },
+  { kind: "result", text: "Schema valid · 0 errors · 2 warnings (non-blocking)",     delay: 400  },
+  { kind: "think",  text: "Pushing space graph and device definitions to Studio…",    delay: 600  },
+  { kind: "action", text: "deploy_bxml({ target: 'cloud_studio', merge: 'replace' })", delay: 1200 },
+  { kind: "result", text: "Space graph updated · 12 devices registered",              delay: 400  },
+  { kind: "action", text: "sync_automations({ rules: 8, scenes: 3 })",                delay: 900  },
+  { kind: "result", text: "8 automation rules · 3 scenes activated",                  delay: 400  },
+  { kind: "action", text: "notify_life_app({ event: 'bxml_updated' })",               delay: 600  },
+  { kind: "done",   text: "Deployment complete — BXML is live on Cloud Studio",       delay: 0    },
+];
+
+function DeployToStudioModal({ project, onClose }: { project: Project | null; onClose: () => void }) {
+  const [phase, setPhase] = React.useState<"idle" | "deploying" | "done">("idle");
+  const [log, setLog] = React.useState<typeof DEPLOY_LOG>([]);
+  const [targetStudioId, setTargetStudioId] = React.useState<string>(MOCK_CLOUD_STUDIOS[0]?.id ?? "");
+  const logRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (!project) { setPhase("idle"); setLog([]); setTargetStudioId(MOCK_CLOUD_STUDIOS[0]?.id ?? ""); }
+  }, [project]);
+
+  React.useEffect(() => {
+    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
+  }, [log]);
+
+  const startDeploy = () => {
+    setPhase("deploying");
+    let cursor = 0;
+    DEPLOY_LOG.forEach((entry, i) => {
+      cursor += 400 + entry.delay;
+      setTimeout(() => {
+        setLog((prev) => [...prev, entry]);
+        if (entry.kind === "done") setTimeout(() => setPhase("done"), 300);
+      }, cursor);
+    });
+  };
+
+  const kindStyle = {
+    think:  { label: "think",  textColor: "text-zinc-400",   labelColor: "text-violet-400" },
+    action: { label: "call",   textColor: "text-zinc-200",   labelColor: "text-sky-400"    },
+    result: { label: "obs",    textColor: "text-zinc-300",   labelColor: "text-emerald-400" },
+    done:   { label: "done",   textColor: "text-emerald-300", labelColor: "text-emerald-400" },
+  };
+
+  if (!project) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="w-full max-w-lg rounded-2xl border border-zinc-800 bg-zinc-950 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-500/15">
+              <CloudUpload className="h-4 w-4 text-sky-400" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-zinc-100">Deploy to Studio</h3>
+              <p className="text-[11px] text-zinc-500">{project.name}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            {phase === "deploying" && (
+              <span className="flex items-center gap-1.5 rounded-full bg-sky-500/10 px-2.5 py-1 text-[10px] font-medium text-sky-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse" />deploying
+              </span>
+            )}
+            <button type="button" onClick={onClose} className="rounded-lg p-1.5 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        {phase === "idle" && (
+          <div className="p-5">
+            <p className="text-xs text-zinc-500 mb-4">选择目标 Cloud Studio，将 BXML 方案实例化部署。部署后可在 Life App 及 Studio Web 中看到完整空间和设备数据。</p>
+            <div className="space-y-2 mb-5">
+              {MOCK_CLOUD_STUDIOS.map((studio) => (
+                <button key={studio.id} type="button"
+                  onClick={() => setTargetStudioId(studio.id)}
+                  className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all ${targetStudioId === studio.id ? "border-sky-500/40 bg-sky-500/[0.05]" : "border-zinc-800 hover:border-zinc-700"}`}>
+                  <span className={`h-2 w-2 shrink-0 rounded-full ${studio.status === "online" ? "bg-emerald-400" : "bg-zinc-600"}`} />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-xs font-medium text-zinc-200">{studio.label}</span>
+                      <span className="text-[10px] text-zinc-600 truncate">{studio.name}</span>
+                    </div>
+                    <div className="text-[10px] text-zinc-600 mt-0.5">{studio.devices} 台设备 · {studio.rooms} 个空间</div>
+                  </div>
+                  {targetStudioId === studio.id && <div className="h-4 w-4 shrink-0 rounded-full bg-sky-500/20 flex items-center justify-center"><div className="h-1.5 w-1.5 rounded-full bg-sky-400" /></div>}
+                </button>
+              ))}
+            </div>
+            <button type="button" onClick={startDeploy} disabled={!targetStudioId}
+              className="w-full rounded-xl bg-sky-600 py-2.5 text-sm font-semibold text-white hover:bg-sky-500 disabled:opacity-40 transition-colors">
+              开始部署
+            </button>
+          </div>
+        )}
+
+        {(phase === "deploying" || phase === "done") && (
+          <div className="p-4">
+            <div ref={logRef} className="font-mono text-[11px] space-y-1.5 max-h-64 overflow-y-auto">
+              {log.map((entry, i) => {
+                const s = kindStyle[entry.kind];
+                return (
+                  <div key={i} className="flex items-start gap-2">
+                    <span className={`w-9 text-right shrink-0 ${s.labelColor} opacity-70`}>{s.label}</span>
+                    <span className="text-zinc-700 shrink-0">›</span>
+                    <span className={s.textColor}>{entry.text}</span>
+                  </div>
+                );
+              })}
+              {phase === "deploying" && (
+                <div className="flex items-center gap-2 pl-11 pt-0.5">
+                  {[0, 1, 2].map((i) => (
+                    <span key={i} className="h-1 w-1 rounded-full bg-zinc-600 animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
+                  ))}
+                </div>
+              )}
+            </div>
+            {phase === "done" && (
+              <div className="border-t border-zinc-800 mt-4 pt-4 flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs text-emerald-400">
+                  <Check className="h-3.5 w-3.5" />
+                  已部署 · Life App 登录后可实控
+                </div>
+                <button type="button" onClick={onClose}
+                  className="rounded-xl bg-zinc-800 px-4 py-2 text-xs font-medium text-zinc-200 hover:bg-zinc-700 transition-colors">
+                  完成
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

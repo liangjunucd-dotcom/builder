@@ -31,7 +31,6 @@ export function AppCanvas({
   onEditRole,
   onDeleteRole,
   onGenerateQr,
-  onExportBxml,
 }: {
   isDesignMode?: boolean;
   selectedId?: string | null;
@@ -41,7 +40,6 @@ export function AppCanvas({
   onGeneratePlugin?: () => void;
   onOpenBom?: () => void;
   onPreviewLifeApp?: () => void;
-  onExportBxml?: () => void;
   rolePluginConfigs?: RolePluginConfig[];
   bomItems?: BomItem[];
   onAddRole?: () => void;
@@ -88,15 +86,6 @@ export function AppCanvas({
                 <span className="text-zinc-700">·</span>
                 <span>{bxmlScenes.length} 场景</span>
               </div>
-            )}
-            {onExportBxml && (
-              <button
-                type="button"
-                onClick={onExportBxml}
-                className="flex items-center gap-1.5 rounded-lg border border-zinc-700/40 bg-zinc-800/40 px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200 hover:border-zinc-600 transition-all"
-              >
-                <Download className="h-3.5 w-3.5" /> 导出 BXML
-              </button>
             )}
           </div>
         </div>

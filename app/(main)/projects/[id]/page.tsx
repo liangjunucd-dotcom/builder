@@ -7,7 +7,7 @@ import {
   Coins, Copy, Edit3, Eye,
   Zap, Box, PanelLeftClose, PanelLeftOpen, MessageSquare,
   ImagePlus, X, Check, ChevronRight, ChevronLeft, CircleDot,
-  Cpu, LayoutGrid, Share2, PenTool, MessageSquarePlus, Upload,
+  Cpu, Share2, PenTool, MessageSquarePlus, Upload, Download, Package,
   Plus, Clock, AlertCircle,
 } from "lucide-react";
 import { useAccount } from "@/context/AccountContext";
@@ -31,8 +31,6 @@ import {
   DesignPanel,
   DeployDialog,
   ShareDialog,
-  PublishDialog,
-  BxmlSidebar,
   type CanvasView,
   type GenStep,
   GEN_STEPS,
@@ -62,6 +60,9 @@ function ProjectEditorContent() {
   const [activeSkills, setActiveSkills] = useState<string[]>([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [selectedStudioId, setSelectedStudioId] = useState<string | null>(project?.selectedStudioId ?? null);
+  const [homeDataSyncStatus, setHomeDataSyncStatus] = useState<"synced" | "not_synced">(project?.homeDataSyncStatus ?? "not_synced");
+  const [homeDataFamilyName, setHomeDataFamilyName] = useState<string>(project?.homeDataFamilyName ?? "");
+  const [homeDataPromptState, setHomeDataPromptState] = useState<"never_asked" | "declined" | "accepted">(project?.homeDataPromptState ?? "never_asked");
   const [attachedImageNames, setAttachedImageNames] = useState<string[]>(project?.attachedImageNames ?? []);
 
   const [canvasView, setCanvasView] = useState<CanvasView>("space");
@@ -69,7 +70,6 @@ function ProjectEditorContent() {
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
   const [projectMenuOpen, setProjectMenuOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
-  const [publishOpen, setPublishOpen] = useState(false);
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [plusMenuOpen, setPlusMenuOpen] = useState(false);
 
@@ -83,7 +83,6 @@ function ProjectEditorContent() {
 
   const [agentStep, setAgentStep] = useState<BXMLAgentStep>(project?.agentStep as BXMLAgentStep ?? "describe");
   const [bxmlDoc, setBxmlDocRaw] = useState<BXMLDocument | null>(null);
-  const [bxmlPanelOpen, setBxmlPanelOpen] = useState(false);
 
   const setBxmlDoc = useCallback((doc: BXMLDocument | null) => {
     setBxmlDocRaw(doc);
@@ -133,11 +132,20 @@ function ProjectEditorContent() {
   const chatEndRef = useRef<HTMLDivElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const hasBootstrapped = useRef(false);
+  const hasShownHomeNudge = useRef(false);
   const studioOptions = getStudiosByIds(currentSpace?.studioIds ?? []);
   const projectName = project?.name ?? promptParam?.slice(0, 30) ?? "Untitled Project";
+  const selectedStudioName = studioOptions.find((s) => s.id === selectedStudioId)?.name ?? selectedStudioId ?? "Cloud Studio";
 
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
   useEffect(() => { const t = setTimeout(() => setIsPageLoading(false), loadingParam ? 1100 : 650); return () => clearTimeout(t); }, [loadingParam]);
+  useEffect(() => {
+    if (!project) return;
+    setSelectedStudioId(project.selectedStudioId ?? null);
+    setHomeDataSyncStatus(project.homeDataSyncStatus ?? "not_synced");
+    setHomeDataFamilyName(project.homeDataFamilyName ?? "");
+    setHomeDataPromptState(project.homeDataPromptState ?? "never_asked");
+  }, [project]);
 
   useEffect(() => {
     const saved = getBxml(projectId);
@@ -195,7 +203,6 @@ function ProjectEditorContent() {
             };
             setMessages((prev) => [...prev, ...result.messages, summaryMsg]);
             setHasGenerated(true);
-            setBxmlPanelOpen(true);
           }, 200);
         }
       }, totalDelay);
@@ -215,10 +222,31 @@ function ProjectEditorContent() {
 
   const { deductCredits } = useBilling();
   const [chatCreditWarning, setChatCreditWarning] = useState(false);
+  const updateHomePromptState = useCallback((next: "never_asked" | "declined" | "accepted") => {
+    setHomeDataPromptState(next);
+    if (!project?.id) return;
+    updateProject(project.id, {
+      homeDataPromptState: next,
+      updatedAt: new Date().toISOString(),
+    });
+  }, [project?.id, updateProject]);
 
   const handleSend = async () => {
     const msg = chatInput.trim();
     if (!msg) return;
+    const hasHomeIntent = /(我家|我现在的|现有设备|已有设备|现有家庭|客厅|卧室|厨房|卫生间|Aqara Home|家庭数据)/i.test(msg);
+    if (selectedStudioId && homeDataSyncStatus === "not_synced" && hasHomeIntent && !hasShownHomeNudge.current) {
+      hasShownHomeNudge.current = true;
+      const gentle = homeDataPromptState === "declined"
+        ? "如果你希望我更贴近你现有的空间来生成，也可以把 Aqara Home 家庭数据接入当前 Studio。"
+        : "当前 Studio 尚未同步 Aqara Home 家庭数据。是否接入后再继续？这样我可以基于真实家庭与设备上下文生成方案。";
+      const userMsg: AgentMessage = { id: `msg-${Date.now()}`, role: "user", text: msg, timestamp: new Date().toISOString() };
+      const agentMsg: AgentMessage = { id: `msg-${Date.now()}-nudge`, role: "agent", text: gentle, timestamp: new Date().toISOString() };
+      setMessages((prev) => [...prev, userMsg, agentMsg]);
+      setChatInput("");
+      if (homeDataPromptState === "never_asked") updateHomePromptState("declined");
+      return;
+    }
     if (!deductCredits(100)) { setChatCreditWarning(true); return; }
     setChatCreditWarning(false);
     setChatInput("");
@@ -415,15 +443,6 @@ function ProjectEditorContent() {
         </div>
 
         <div className="flex items-center gap-1">
-          <div className={`hidden sm:flex items-center gap-1.5 rounded-lg border px-2 py-1 mr-2 ${studioExpired ? "border-red-500/30 bg-red-500/5" : "border-zinc-700/30 bg-zinc-800/20"}`}>
-            <span className={`h-2 w-2 rounded-full ${studioExpired ? "bg-red-400" : "bg-emerald-400 animate-pulse"}`} />
-            <span className="text-[10px] text-zinc-400 font-mono">{cloudStudioId}</span>
-            {studioExpired ? (
-              <button type="button" onClick={reallocateStudio} className="ml-1 rounded bg-indigo-600 px-1.5 py-0.5 text-[9px] font-semibold text-white hover:bg-indigo-500 transition-colors">Re-try</button>
-            ) : (
-              <span className="text-[9px] text-zinc-600">{studioExpiresIn}</span>
-            )}
-          </div>
           <div className={`flex items-center rounded-lg border border-zinc-700/40 bg-zinc-800/30 p-0.5 ${isCustomizing ? "opacity-40 pointer-events-none" : ""}`}>
             <button type="button" onClick={() => { if (canvasView === "studio") setCanvasView("space"); }} className={`rounded-md px-3 py-1.5 text-[11px] font-medium transition-all ${canvasView !== "studio" ? "bg-zinc-100 text-zinc-900 shadow-sm" : "text-zinc-500 hover:text-zinc-300"}`}>
               <Eye className="h-3 w-3 inline mr-1" />Preview
@@ -455,16 +474,61 @@ function ProjectEditorContent() {
               </div>
             ))}
           </div>
-          {bxmlDoc && (
-            <button type="button" onClick={() => setBxmlPanelOpen(!bxmlPanelOpen)} className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${bxmlPanelOpen ? "border-blue-500/40 bg-blue-500/10 text-blue-400" : "border-zinc-700/40 text-zinc-400 hover:text-zinc-200 hover:border-zinc-600"}`}>
-              <LayoutGrid className="h-3.5 w-3.5" /> BXML
-            </button>
-          )}
-          {hasGenerated && <span className="flex items-center gap-1.5 text-[11px] text-emerald-400 mr-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Saved</span>}
+          <button
+            type="button"
+            onClick={() => setBomDialogOpen(true)}
+            className="flex items-center gap-1.5 rounded-lg border border-zinc-700/40 px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200 hover:border-zinc-600 transition-colors"
+          >
+            <Package className="h-3.5 w-3.5" /> BOM 清单
+          </button>
+          <button
+            type="button"
+            onClick={handleExportBxml}
+            disabled={!bxmlDoc}
+            className="flex items-center gap-1.5 rounded-lg border border-zinc-700/40 px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200 hover:border-zinc-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <Download className="h-3.5 w-3.5" /> Export
+          </button>
           <button type="button" onClick={() => setShareOpen(true)} className="flex items-center gap-1.5 rounded-lg border border-zinc-700/40 px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-200 hover:border-zinc-600 transition-colors"><Share2 className="h-3.5 w-3.5" /> Share</button>
-          <button type="button" onClick={() => setPublishOpen(true)} className="flex items-center gap-1.5 rounded-lg bg-zinc-100 px-3.5 py-1.5 text-xs font-semibold text-zinc-900 hover:bg-white transition-colors"><Globe className="h-3 w-3" /> Publish</button>
+          <button
+            type="button"
+            className="ml-1 h-8 w-8 rounded-full border border-zinc-700/50 bg-zinc-800/40 text-xs font-semibold text-zinc-200 hover:border-zinc-600 transition-colors"
+            title={account?.email ?? "个人"}
+          >
+            {(account?.email?.[0] ?? "U").toUpperCase()}
+          </button>
         </div>
       </div>
+
+      {selectedStudioId && (
+        <div className="h-10 shrink-0 border-b border-zinc-800/40 bg-zinc-900/50 px-4 flex items-center justify-between">
+          <div className="flex items-center gap-3 text-xs">
+            <div className="relative inline-flex items-center gap-2 rounded-full border border-zinc-700/60 bg-zinc-800/70 px-3 py-1">
+              <span className={`h-1.5 w-1.5 rounded-full ${homeDataSyncStatus === "synced" ? "bg-emerald-400" : "bg-zinc-500"}`} />
+              <span className="max-w-[220px] truncate text-zinc-200 font-medium">{selectedStudioName}</span>
+              {homeDataSyncStatus === "synced" && homeDataFamilyName && (
+                <span className="pointer-events-none absolute -top-2.5 right-2 rounded-full border border-emerald-500/30 bg-emerald-500/20 px-2 py-[1px] text-[10px] font-medium text-emerald-300">
+                  {homeDataFamilyName}
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              {homeDataSyncStatus === "synced" ? (
+                <span className="text-emerald-300">Home Data Synced{homeDataFamilyName ? ` · ${homeDataFamilyName}` : ""}</span>
+              ) : (
+                <span className="text-zinc-400">Home Data Not synced</span>
+              )}
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setCanvasView("studio")}
+            className="rounded-lg border border-zinc-700/50 px-2.5 py-1 text-[11px] text-zinc-400 hover:text-zinc-200 hover:border-zinc-600 transition-colors"
+          >
+            更换 / 管理
+          </button>
+        </div>
+      )}
 
       {/* Body */}
       <div className="flex flex-1 min-h-0 overflow-hidden">
@@ -674,7 +738,7 @@ function ProjectEditorContent() {
                 <p className="mt-3 text-[11px] text-zinc-600">{genSteps.find((s) => s.status === "running")?.label ?? "Preparing…"}</p>
               </div>
             ) : canvasView === "studio" ? (
-              <StudioCanvas selectedStudioId={selectedStudioId} projectId={projectId} projectName={projectName} cloudStudioId={cloudStudioId} studioOptions={studioOptions} hasGenerated={hasGenerated} studioExpired={studioExpired} studioExpiresIn={studioExpiresIn} onLinkStudio={(id) => { setSelectedStudioId(id); if (project?.id) updateProject(project.id, { selectedStudioId: id, studioLinked: true, deployedAt: new Date().toISOString(), updatedAt: new Date().toISOString() }); }} onSelectStudio={handleStudioSelect} onReallocate={reallocateStudio} bxmlDoc={bxmlDoc} />
+              <StudioCanvas selectedStudioId={selectedStudioId} projectId={projectId} projectName={projectName} cloudStudioId={cloudStudioId} studioOptions={studioOptions} hasGenerated={hasGenerated} studioExpired={studioExpired} studioExpiresIn={studioExpiresIn} onSelectStudio={handleStudioSelect} onReallocate={reallocateStudio} bxmlDoc={bxmlDoc} />
             ) : (
               <>
                 {studioExpired && (
@@ -703,7 +767,6 @@ function ProjectEditorContent() {
                     onGeneratePlugin={() => setRolePluginBuilderOpen(true)}
                     onOpenBom={() => setBomDialogOpen(true)}
                     onPreviewLifeApp={handlePreviewLife}
-                    onExportBxml={handleExportBxml}
                     rolePluginConfigs={rolePluginConfigs}
                     bomItems={bomItems}
                     onAddRole={() => setRolePluginBuilderOpen(true)}
@@ -771,11 +834,6 @@ function ProjectEditorContent() {
       )}
 
       <ShareDialog open={shareOpen} onClose={() => setShareOpen(false)} />
-      <PublishDialog open={publishOpen} onClose={() => setPublishOpen(false)} projectName={projectName} />
-
-      {bxmlPanelOpen && bxmlDoc && (
-        <BxmlSidebar bxmlDoc={bxmlDoc} onClose={() => setBxmlPanelOpen(false)} />
-      )}
 
       {deployDialogOpen && (
         <DeployDialog
